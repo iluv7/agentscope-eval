@@ -7,6 +7,11 @@ from openai import AsyncOpenAI
 
 from agentscope_eval import __version__
 from agentscope_eval.agentscope import AgentScopeRequest
+from agentscope_eval.benchmarks.schemas import (
+    BenchmarkReport,
+    BenchmarkRequest,
+)
+from agentscope_eval.benchmarks.tool_loading import evaluate_tool_loading
 from agentscope_eval.config import Settings
 from agentscope_eval.engine import Evaluator
 from agentscope_eval.judge import JsonJudge
@@ -89,6 +94,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/health")
     async def health():
         return {"status": "ok", "judge_configured": settings.judge_configured}
+
+    @app.post(
+        "/v1/benchmarks/tool-loading/evaluate", response_model=BenchmarkReport
+    )
+    def benchmark_tool_loading(payload: BenchmarkRequest):
+        return evaluate_tool_loading(payload)
 
     @app.get("/v1/metrics")
     async def list_metrics():

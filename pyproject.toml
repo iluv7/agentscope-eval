@@ -17,10 +17,13 @@ dependencies = [
   "uvicorn>=0.30,<1",
   "pydantic-settings>=2.10,<3",
   "openai>=1.100,<3",
+  "jsonschema>=4.23,<5",
+  "referencing>=0.35,<1",
 ]
 
 [project.scripts]
 agentscope-eval = "agentscope_eval.cli:main"
+agentscope-eval-benchmark = "agentscope_eval.benchmarks.cli:main"
 
 [dependency-groups]
 dev = ["httpx>=0.28,<1", "pytest>=8,<10", "ruff>=0.12,<1"]
