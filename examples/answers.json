@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "case_id": "order-answer",
+      "input": "查询订单 A123 的物流状态",
+      "actual_output": "订单 A123 已经发货，预计明天送达。",
+      "expected_output": "订单 A123 已发货，预计明天送达。",
+      "retrieval_context": ["订单系统记录：A123 已发货，预计明天送达。"]
+    }
+  ],
+  "metrics": [
+    {"name": "answer_correctness", "threshold": 0.7},
+    {"name": "answer_relevancy", "threshold": 0.7},
+    {"name": "faithfulness", "threshold": 0.7}
+  ]
+}

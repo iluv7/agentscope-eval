@@ -1,0 +1,86 @@
+{
+  "cases": [
+    {
+      "case_id": "agentscope-order-001",
+      "input": "查询订单 A123 的物流状态",
+      "reply": {
+        "name": "OrderAgent",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "Internal reasoning, excluded from evaluation.",
+            "id": "8c861146b80b45c486f6bff87911cff9",
+            "created_at": "2026-09-02T20:41:37.473865",
+            "finished_at": null
+          },
+          {
+            "type": "text",
+            "text": "我先查询订单。",
+            "id": "bfea0ed4501145d0acdaccea96d509f1",
+            "created_at": "2026-09-02T20:41:37.474002",
+            "finished_at": null
+          },
+          {
+            "type": "tool_call",
+            "id": "call-001",
+            "name": "query_order",
+            "input": "{\"order_id\":\"A123\"}",
+            "state": "finished",
+            "suggested_rules": [],
+            "created_at": "2026-09-02T20:41:37.474097",
+            "finished_at": null
+          },
+          {
+            "type": "tool_result",
+            "id": "call-001",
+            "name": "query_order",
+            "output": "已发货，预计明天送达。",
+            "state": "success",
+            "metadata": {},
+            "created_at": "2026-09-02T20:41:37.474167",
+            "finished_at": null
+          },
+          {
+            "type": "text",
+            "text": "订单 A123 已发货，预计明天送达。",
+            "id": "6810e88679404fc182d57c6a308574af",
+            "created_at": "2026-09-02T20:41:37.474236",
+            "finished_at": null
+          }
+        ],
+        "role": "assistant",
+        "id": "reply-order-001",
+        "metadata": {},
+        "created_at": "2026-09-02T20:41:37.474326",
+        "usage": null,
+        "finished_at": null,
+        "finished_reason": "completed",
+        "structured_output": null,
+        "error": null
+      },
+      "expected_output": "订单 A123 已发货，预计明天送达。",
+      "expected_tools": [
+        {
+          "name": "query_order",
+          "input_parameters": {
+            "order_id": "A123"
+          }
+        }
+      ]
+    }
+  ],
+  "metrics": [
+    {
+      "name": "execution_success",
+      "threshold": 1
+    },
+    {
+      "name": "tool_correctness",
+      "threshold": 1
+    },
+    {
+      "name": "exact_match",
+      "threshold": 1
+    }
+  ]
+}

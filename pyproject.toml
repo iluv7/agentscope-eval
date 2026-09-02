@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agentscope-eval"
+version = "0.1.0"
+description = "An evaluation layer for AgentScope replies and tool execution."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "iluv7" }]
+requires-python = ">=3.11,<3.15"
+dependencies = [
+  "deepeval==4.1.8",
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.30,<1",
+  "pydantic-settings>=2.10,<3",
+  "openai>=1.100,<3",
+]
+
+[project.scripts]
+agentscope-eval = "agentscope_eval.cli:main"
+
+[dependency-groups]
+dev = ["httpx>=0.28,<1", "pytest>=8,<10", "ruff>=0.12,<1"]
+
+[project.urls]
+Repository = "https://github.com/iluv7/agentscope-eval"
+Issues = "https://github.com/iluv7/agentscope-eval/issues"
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:deepeval -p no:rerunfailures"

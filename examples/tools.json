@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "case_id": "correct-order",
+      "input": "查询订单 A123 的物流状态",
+      "actual_output": "订单 A123 已发货。",
+      "tools_called": [{"name": "query_order", "input_parameters": {"order_id": "A123"}}],
+      "expected_tools": [{"name": "query_order", "input_parameters": {"order_id": "A123"}}]
+    },
+    {
+      "case_id": "wrong-order",
+      "input": "查询订单 A123 的物流状态",
+      "actual_output": "订单 B456 已发货。",
+      "tools_called": [{"name": "query_order", "input_parameters": {"order_id": "B456"}}],
+      "expected_tools": [{"name": "query_order", "input_parameters": {"order_id": "A123"}}]
+    }
+  ],
+  "metrics": [{"name": "tool_correctness", "threshold": 1.0}]
+}
