@@ -171,3 +171,9 @@ uv run ruff format --check .
 Tests exercise the real DeepEval tool matching and LLM metric implementations. LLM HTTP responses are mocked, so the tests do not incur model charges. Coverage also includes input validation, error isolation, timeouts, concurrency, AgentScope message conversion, and the JSON judge adapter.
 
 GitHub Actions runs tests and Ruff checks on Python 3.11 and 3.13 without model API keys.
+
+## License
+
+Copyright 2026 iluv7. Licensed under the [Apache License 2.0](LICENSE).
+
+DeepEval is installed as a separate third-party dependency and is covered by its own [Apache-2.0 license](https://github.com/confident-ai/deepeval/blob/main/LICENSE.md).
