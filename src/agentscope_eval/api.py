@@ -15,6 +15,7 @@ from agentscope_eval.schemas import (
     EvaluateRequest,
     EvaluateResponse,
 )
+from evaluations import iter_routers
 
 METRICS = [
     {
@@ -89,6 +90,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/health")
     async def health():
         return {"status": "ok", "judge_configured": settings.judge_configured}
+
+    for router in iter_routers():
+        app.include_router(router)
 
     @app.get("/v1/metrics")
     async def list_metrics():

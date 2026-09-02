@@ -1,0 +1,983 @@
+{
+  "tools": [
+    {
+      "name": "submit_payload",
+      "input_schema": {
+        "$defs": {
+          "node": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "children": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/node"
+                }
+              }
+            },
+            "required": [
+              "label",
+              "children"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "options": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "limit": {
+                "type": "integer"
+              },
+              "note": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "enabled",
+              "limit",
+              "note"
+            ],
+            "additionalProperties": false
+          },
+          "tree": {
+            "$ref": "#/$defs/node"
+          }
+        },
+        "required": [
+          "text",
+          "items",
+          "options",
+          "tree"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "trials": [
+    {
+      "run_id": "native-escaping",
+      "case_id": "escaping",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"quote \\\" slash \\\\ path C:\\\\tmp\\nline\\tend\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "escaping",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "native",
+        "evaluation_scope": "generation",
+        "schema_placement": "tools",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "quote \" slash \\ path C:\\tmp\nline\tend",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "submit_payload",
+            "arguments": "{\"text\": \"quote \\\" slash \\\\ path C:\\\\tmp\\nline\\tend\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "native-unicode",
+      "case_id": "unicode",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"你好 café 🚀\", \"items\": [\"α\", \"β\"], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "unicode",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "native",
+        "evaluation_scope": "generation",
+        "schema_placement": "tools",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "你好 café 🚀",
+        "items": [
+          "α",
+          "β"
+        ],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "submit_payload",
+            "arguments": "{\"text\": \"你好 café 🚀\", \"items\": [\"α\", \"β\"], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "native-code_string",
+      "case_id": "code_string",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"def f():\\n    return {\\\"key\\\": \\\"value\\\"}\\n\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "code_string",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "native",
+        "evaluation_scope": "generation",
+        "schema_placement": "tools",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "def f():\n    return {\"key\": \"value\"}\n",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "submit_payload",
+            "arguments": "{\"text\": \"def f():\\n    return {\\\"key\\\": \\\"value\\\"}\\n\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "native-arrays",
+      "case_id": "arrays",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"hello\", \"items\": [\"\", \"a\", \"\\\"quoted\\\"\", \"line\\nbreak\"], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "arrays",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "native",
+        "evaluation_scope": "generation",
+        "schema_placement": "tools",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "hello",
+        "items": [
+          "",
+          "a",
+          "\"quoted\"",
+          "line\nbreak"
+        ],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "submit_payload",
+            "arguments": "{\"text\": \"hello\", \"items\": [\"\", \"a\", \"\\\"quoted\\\"\", \"line\\nbreak\"], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "native-nested_depth_8",
+      "case_id": "nested_depth_8",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"level-7\", \"children\": [{\"label\": \"level-6\", \"children\": [{\"label\": \"level-5\", \"children\": [{\"label\": \"level-4\", \"children\": [{\"label\": \"level-3\", \"children\": [{\"label\": \"level-2\", \"children\": [{\"label\": \"level-1\", \"children\": [{\"label\": \"level-0\", \"children\": [{\"label\": \"leaf\", \"children\": []}]}]}]}]}]}]}]}]}}",
+      "scenario": "nested_depth_8",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "native",
+        "evaluation_scope": "generation",
+        "schema_placement": "tools",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "hello",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "level-7",
+          "children": [
+            {
+              "label": "level-6",
+              "children": [
+                {
+                  "label": "level-5",
+                  "children": [
+                    {
+                      "label": "level-4",
+                      "children": [
+                        {
+                          "label": "level-3",
+                          "children": [
+                            {
+                              "label": "level-2",
+                              "children": [
+                                {
+                                  "label": "level-1",
+                                  "children": [
+                                    {
+                                      "label": "level-0",
+                                      "children": [
+                                        {
+                                          "label": "leaf",
+                                          "children": []
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "submit_payload",
+            "arguments": "{\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"level-7\", \"children\": [{\"label\": \"level-6\", \"children\": [{\"label\": \"level-5\", \"children\": [{\"label\": \"level-4\", \"children\": [{\"label\": \"level-3\", \"children\": [{\"label\": \"level-2\", \"children\": [{\"label\": \"level-1\", \"children\": [{\"label\": \"level-0\", \"children\": [{\"label\": \"leaf\", \"children\": []}]}]}]}]}]}]}]}]}}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "native-long_string",
+      "case_id": "long_string",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"line \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\n\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "long_string",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "native",
+        "evaluation_scope": "generation",
+        "schema_placement": "tools",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "line \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\n",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "submit_payload",
+            "arguments": "{\"text\": \"line \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\n\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "dispatcher-escaping",
+      "case_id": "escaping",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"quote \\\" slash \\\\ path C:\\\\tmp\\nline\\tend\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "escaping",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "dispatcher",
+        "evaluation_scope": "generation",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "quote \" slash \\ path C:\\tmp\nline\tend",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "execute_tool",
+            "arguments": "{\"tool_name\": \"submit_payload\", \"arguments\": {\"text\": \"quote \\\" slash \\\\ path C:\\\\tmp\\nline\\tend\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "dispatcher-unicode",
+      "case_id": "unicode",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"你好 café 🚀\", \"items\": [\"α\", \"β\"], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "unicode",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "dispatcher",
+        "evaluation_scope": "generation",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "你好 café 🚀",
+        "items": [
+          "α",
+          "β"
+        ],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "execute_tool",
+            "arguments": "{\"tool_name\": \"submit_payload\", \"arguments\": {\"text\": \"你好 café 🚀\", \"items\": [\"α\", \"β\"], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "dispatcher-code_string",
+      "case_id": "code_string",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"def f():\\n    return {\\\"key\\\": \\\"value\\\"}\\n\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "code_string",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "dispatcher",
+        "evaluation_scope": "generation",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "def f():\n    return {\"key\": \"value\"}\n",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "execute_tool",
+            "arguments": "{\"tool_name\": \"submit_payload\", \"arguments\": {\"text\": \"def f():\\n    return {\\\"key\\\": \\\"value\\\"}\\n\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "dispatcher-arrays",
+      "case_id": "arrays",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"hello\", \"items\": [\"\", \"a\", \"\\\"quoted\\\"\", \"line\\nbreak\"], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "arrays",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "dispatcher",
+        "evaluation_scope": "generation",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "hello",
+        "items": [
+          "",
+          "a",
+          "\"quoted\"",
+          "line\nbreak"
+        ],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "execute_tool",
+            "arguments": "{\"tool_name\": \"submit_payload\", \"arguments\": {\"text\": \"hello\", \"items\": [\"\", \"a\", \"\\\"quoted\\\"\", \"line\\nbreak\"], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "dispatcher-nested_depth_8",
+      "case_id": "nested_depth_8",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"level-7\", \"children\": [{\"label\": \"level-6\", \"children\": [{\"label\": \"level-5\", \"children\": [{\"label\": \"level-4\", \"children\": [{\"label\": \"level-3\", \"children\": [{\"label\": \"level-2\", \"children\": [{\"label\": \"level-1\", \"children\": [{\"label\": \"level-0\", \"children\": [{\"label\": \"leaf\", \"children\": []}]}]}]}]}]}]}]}]}}",
+      "scenario": "nested_depth_8",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "dispatcher",
+        "evaluation_scope": "generation",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "hello",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "level-7",
+          "children": [
+            {
+              "label": "level-6",
+              "children": [
+                {
+                  "label": "level-5",
+                  "children": [
+                    {
+                      "label": "level-4",
+                      "children": [
+                        {
+                          "label": "level-3",
+                          "children": [
+                            {
+                              "label": "level-2",
+                              "children": [
+                                {
+                                  "label": "level-1",
+                                  "children": [
+                                    {
+                                      "label": "level-0",
+                                      "children": [
+                                        {
+                                          "label": "leaf",
+                                          "children": []
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "execute_tool",
+            "arguments": "{\"tool_name\": \"submit_payload\", \"arguments\": {\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"level-7\", \"children\": [{\"label\": \"level-6\", \"children\": [{\"label\": \"level-5\", \"children\": [{\"label\": \"level-4\", \"children\": [{\"label\": \"level-3\", \"children\": [{\"label\": \"level-2\", \"children\": [{\"label\": \"level-1\", \"children\": [{\"label\": \"level-0\", \"children\": [{\"label\": \"leaf\", \"children\": []}]}]}]}]}]}]}]}]}}}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "dispatcher-long_string",
+      "case_id": "long_string",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"line \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\n\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "long_string",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "dispatcher",
+        "evaluation_scope": "generation",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "line \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\nline \"quote\" \\ end\n",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "execute_tool",
+            "arguments": "{\"tool_name\": \"submit_payload\", \"arguments\": {\"text\": \"line \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\nline \\\"quote\\\" \\\\ end\\n\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "dispatcher-repair",
+      "case_id": "repair",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "repair",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "dispatcher",
+        "evaluation_scope": "generation",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "hello",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "execute_tool",
+            "arguments": "{\"tool_name\":\"submit_payload\",\"arguments\":"
+          },
+          "repaired_arguments": "{\"tool_name\": \"submit_payload\", \"arguments\": {\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}}"
+        }
+      ]
+    },
+    {
+      "run_id": "dispatcher-retry",
+      "case_id": "retry",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "retry",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "dispatcher",
+        "evaluation_scope": "generation",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "hello",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": null,
+      "attempts": [
+        {
+          "call": {
+            "call_id": "failed-attempt",
+            "name": "execute_tool",
+            "arguments": "{"
+          }
+        },
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "execute_tool",
+            "arguments": "{\"tool_name\": \"submit_payload\", \"arguments\": {\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "dispatcher-no_call",
+      "case_id": "no_call",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "no_call",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "dispatcher",
+        "evaluation_scope": "generation",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "hello",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": null,
+      "attempts": []
+    },
+    {
+      "run_id": "discovery-full_pipeline",
+      "case_id": "full_pipeline",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "full_pipeline",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "hello",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": {
+        "accepted": true
+      },
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "execute_tool",
+            "arguments": "{\"tool_name\": \"submit_payload\", \"arguments\": {\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}}"
+          },
+          "execution": {
+            "call_id": "call-1",
+            "tool_name": "submit_payload",
+            "arguments": {
+              "text": "hello",
+              "items": [],
+              "options": {
+                "enabled": true,
+                "limit": 3,
+                "note": null
+              },
+              "tree": {
+                "label": "root",
+                "children": []
+              }
+            },
+            "status": "success",
+            "output": {
+              "accepted": true
+            }
+          },
+          "search_call": {
+            "call_id": "search-1",
+            "name": "search_tools",
+            "arguments": "{\"query\":\"submit a structured payload\"}"
+          },
+          "search_result": {
+            "call_id": "search-1",
+            "status": "success",
+            "raw_output": "{\"tools\": [{\"name\": \"submit_payload\", \"input_schema\": {\"$defs\": {\"node\": {\"type\": \"object\", \"properties\": {\"label\": {\"type\": \"string\"}, \"children\": {\"type\": \"array\", \"items\": {\"$ref\": \"#/$defs/node\"}}}, \"required\": [\"label\", \"children\"], \"additionalProperties\": false}}, \"type\": \"object\", \"properties\": {\"text\": {\"type\": \"string\"}, \"items\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}}, \"options\": {\"type\": \"object\", \"properties\": {\"enabled\": {\"type\": \"boolean\"}, \"limit\": {\"type\": \"integer\"}, \"note\": {\"type\": [\"string\", \"null\"]}}, \"required\": [\"enabled\", \"limit\", \"note\"], \"additionalProperties\": false}, \"tree\": {\"$ref\": \"#/$defs/node\"}}, \"required\": [\"text\", \"items\", \"options\", \"tree\"], \"additionalProperties\": false}}]}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "discovery-search_miss",
+      "case_id": "search_miss",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "search_miss",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "hello",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": {
+        "accepted": true
+      },
+      "attempts": [
+        {
+          "search_call": {
+            "call_id": "search-1",
+            "name": "search_tools",
+            "arguments": "{\"query\":\"submit a structured payload\"}"
+          },
+          "search_result": {
+            "call_id": "search-1",
+            "status": "success",
+            "raw_output": "{\"tools\":[]}"
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "discovery-tool_error",
+      "case_id": "tool_error",
+      "input": "Submit this payload exactly, preserving all values:\n{\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}",
+      "scenario": "tool_error",
+      "configuration": {
+        "provider": "fixture",
+        "model": "synthetic-observations",
+        "source": "fixture",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.7.post1",
+        "catalog_version": "fixture-v1",
+        "prompt_version": "fixture-v1"
+      },
+      "target_tool": "submit_payload",
+      "expected_arguments": {
+        "text": "hello",
+        "items": [],
+        "options": {
+          "enabled": true,
+          "limit": 3,
+          "note": null
+        },
+        "tree": {
+          "label": "root",
+          "children": []
+        }
+      },
+      "expected_output": {
+        "accepted": true
+      },
+      "attempts": [
+        {
+          "call": {
+            "call_id": "call-1",
+            "name": "execute_tool",
+            "arguments": "{\"tool_name\": \"submit_payload\", \"arguments\": {\"text\": \"hello\", \"items\": [], \"options\": {\"enabled\": true, \"limit\": 3, \"note\": null}, \"tree\": {\"label\": \"root\", \"children\": []}}}"
+          },
+          "execution": {
+            "call_id": "call-1",
+            "tool_name": "submit_payload",
+            "arguments": {
+              "text": "hello",
+              "items": [],
+              "options": {
+                "enabled": true,
+                "limit": 3,
+                "note": null
+              },
+              "tree": {
+                "label": "root",
+                "children": []
+              }
+            },
+            "status": "error",
+            "output": "injected failure"
+          },
+          "search_call": {
+            "call_id": "search-1",
+            "name": "search_tools",
+            "arguments": "{\"query\":\"submit a structured payload\"}"
+          },
+          "search_result": {
+            "call_id": "search-1",
+            "status": "success",
+            "raw_output": "{\"tools\": [{\"name\": \"submit_payload\", \"input_schema\": {\"$defs\": {\"node\": {\"type\": \"object\", \"properties\": {\"label\": {\"type\": \"string\"}, \"children\": {\"type\": \"array\", \"items\": {\"$ref\": \"#/$defs/node\"}}}, \"required\": [\"label\", \"children\"], \"additionalProperties\": false}}, \"type\": \"object\", \"properties\": {\"text\": {\"type\": \"string\"}, \"items\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}}, \"options\": {\"type\": \"object\", \"properties\": {\"enabled\": {\"type\": \"boolean\"}, \"limit\": {\"type\": \"integer\"}, \"note\": {\"type\": [\"string\", \"null\"]}}, \"required\": [\"enabled\", \"limit\", \"note\"], \"additionalProperties\": false}, \"tree\": {\"$ref\": \"#/$defs/node\"}}, \"required\": [\"text\", \"items\", \"options\", \"tree\"], \"additionalProperties\": false}}]}"
+          }
+        }
+      ]
+    }
+  ],
+  "search_k": 5
+}
