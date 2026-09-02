@@ -2,8 +2,6 @@
 
 An evaluation layer for **AgentScope**, powered by [DeepEval](https://github.com/confident-ai/deepeval) 4.1.8. Submit recorded AgentScope replies to evaluate execution status, tool calls, and answer quality through a local API or Python adapter. Results include scores, explanations, and batch summaries.
 
-This is an independent project, unaffiliated with the official AgentScope and DeepEval projects.
-
 ## Quick start
 
 Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/getting-started/installation/).
