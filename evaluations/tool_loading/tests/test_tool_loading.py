@@ -12,11 +12,11 @@ from fastapi.testclient import TestClient
 from pydantic import ValidationError
 
 from agentscope_eval.api import create_app
-from agentscope_eval.benchmarks.agentscope import ToolLoadingRecorder
-from agentscope_eval.benchmarks.cli import render_markdown
-from agentscope_eval.benchmarks.schemas import BenchmarkRequest, Execution
-from agentscope_eval.benchmarks.tool_loading import evaluate_tool_loading
 from agentscope_eval.config import Settings
+from evaluations.tool_loading.agentscope import ToolLoadingRecorder
+from evaluations.tool_loading.cli import render_markdown
+from evaluations.tool_loading.evaluate import evaluate_tool_loading
+from evaluations.tool_loading.schemas import BenchmarkRequest, Execution
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOL = {
@@ -129,9 +129,7 @@ class BenchmarkTests(unittest.TestCase):
             BenchmarkRequest.model_validate(payload)
 
     def test_synthetic_fixture_has_expected_failure_and_recovery_counts(self):
-        payload = json.loads(
-            (ROOT / "examples/tool_loading/fixture.json").read_text()
-        )
+        payload = json.loads((ROOT / "examples/fixture.json").read_text())
         report = score(payload)
         self.assertEqual(report.summary.runs, 18)
         self.assertEqual(report.summary.metrics["eventual_success"].passed, 15)
@@ -428,7 +426,7 @@ class BenchmarkTests(unittest.TestCase):
                 [
                     sys.executable,
                     "-m",
-                    "agentscope_eval.benchmarks.cli",
+                    "evaluations.tool_loading",
                     str(source),
                     "--output",
                     str(output),

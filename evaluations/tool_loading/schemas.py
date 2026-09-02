@@ -5,8 +5,9 @@ from typing import Any, Literal, Self
 
 from pydantic import Field, field_validator, model_validator
 
-from agentscope_eval.benchmarks.json_utils import check_schema, schema_matches
 from agentscope_eval.schemas import Contract
+
+from .json_utils import check_schema, schema_matches
 
 Variant = Literal["native", "dispatcher", "discovery"]
 CheckStatus = Literal["passed", "failed", "not_reached", "not_applicable"]

@@ -7,11 +7,6 @@ from openai import AsyncOpenAI
 
 from agentscope_eval import __version__
 from agentscope_eval.agentscope import AgentScopeRequest
-from agentscope_eval.benchmarks.schemas import (
-    BenchmarkReport,
-    BenchmarkRequest,
-)
-from agentscope_eval.benchmarks.tool_loading import evaluate_tool_loading
 from agentscope_eval.config import Settings
 from agentscope_eval.engine import Evaluator
 from agentscope_eval.judge import JsonJudge
@@ -20,6 +15,7 @@ from agentscope_eval.schemas import (
     EvaluateRequest,
     EvaluateResponse,
 )
+from evaluations import iter_routers
 
 METRICS = [
     {
@@ -95,11 +91,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def health():
         return {"status": "ok", "judge_configured": settings.judge_configured}
 
-    @app.post(
-        "/v1/benchmarks/tool-loading/evaluate", response_model=BenchmarkReport
-    )
-    def benchmark_tool_loading(payload: BenchmarkRequest):
-        return evaluate_tool_loading(payload)
+    for router in iter_routers():
+        app.include_router(router)
 
     @app.get("/v1/metrics")
     async def list_metrics():

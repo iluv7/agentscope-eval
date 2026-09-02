@@ -23,7 +23,7 @@ dependencies = [
 
 [project.scripts]
 agentscope-eval = "agentscope_eval.cli:main"
-agentscope-eval-benchmark = "agentscope_eval.benchmarks.cli:main"
+agentscope-eval-benchmark = "evaluations.tool_loading.cli:main"
 
 [dependency-groups]
 dev = ["httpx>=0.28,<1", "pytest>=8,<10", "ruff>=0.12,<1"]
@@ -32,6 +32,9 @@ dev = ["httpx>=0.28,<1", "pytest>=8,<10", "ruff>=0.12,<1"]
 Repository = "https://github.com/iluv7/agentscope-eval"
 Issues = "https://github.com/iluv7/agentscope-eval/issues"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/agentscope_eval", "evaluations"]
+
 [tool.ruff]
 line-length = 79
 
@@ -39,5 +42,5 @@ line-length = 79
 select = ["E", "F", "I"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "-p no:deepeval -p no:rerunfailures"
+testpaths = ["tests", "evaluations"]
+addopts = "-p no:deepeval -p no:rerunfailures --import-mode=importlib"

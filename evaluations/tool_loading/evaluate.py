@@ -4,12 +4,13 @@ import json
 from collections import defaultdict
 
 from agentscope_eval import __version__
-from agentscope_eval.benchmarks.json_utils import (
+
+from .json_utils import (
     json_equal,
     parse_json,
     schema_matches,
 )
-from agentscope_eval.benchmarks.schemas import (
+from .schemas import (
     Attempt,
     AttemptResult,
     BenchmarkReport,

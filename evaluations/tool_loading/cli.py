@@ -4,9 +4,9 @@ import argparse
 import sys
 from pathlib import Path
 
-from agentscope_eval.benchmarks.json_utils import parse_json
-from agentscope_eval.benchmarks.schemas import BenchmarkRequest
-from agentscope_eval.benchmarks.tool_loading import evaluate_tool_loading
+from .evaluate import evaluate_tool_loading
+from .json_utils import parse_json
+from .schemas import BenchmarkRequest
 
 
 def render_markdown(report) -> str:

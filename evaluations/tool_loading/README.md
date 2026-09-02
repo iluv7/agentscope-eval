@@ -6,9 +6,11 @@ The first experiment is **nested argument generation**: compare native calls wit
 
 ## Run the included fixture
 
+Run these commands from the repository root. All suite-specific code, tests, examples, and documentation live in this directory. The shared service discovers this suite through `api.py`; `__main__.py` provides its standalone command.
+
 ```bash
 uv sync --locked
-uv run agentscope-eval-benchmark examples/tool_loading/fixture.json \
+uv run python -m evaluations.tool_loading evaluations/tool_loading/examples/fixture.json \
   --output /tmp/tool-loading-report.json \
   --markdown /tmp/tool-loading-report.md
 ```
@@ -16,7 +18,7 @@ uv run agentscope-eval-benchmark examples/tool_loading/fixture.json \
 The fixture contains 18 synthetic trials covering escaping, Unicode, code strings, arrays, nested objects, long strings, repairs, retries, missing calls, search misses, and tool errors. **Its numbers test the evaluator; they are not model benchmark results.** Each configuration is labeled `source: fixture`. Regenerate it with:
 
 ```bash
-python examples/tool_loading/generate_fixture.py
+python evaluations/tool_loading/examples/generate_fixture.py
 ```
 
 For recorded experiments, replace the fixture observations and configuration metadata with actual captures and use `source: recorded`. `--fail-on-failure` returns exit code 1 when any trial fails or errors. Invalid input or an output-file error returns 2; otherwise report generation returns 0.
@@ -26,7 +28,7 @@ The same evaluator is available through the API:
 ```bash
 curl -s http://127.0.0.1:8787/v1/benchmarks/tool-loading/evaluate \
   -H 'Content-Type: application/json' \
-  --data-binary @examples/tool_loading/fixture.json
+  --data-binary @evaluations/tool_loading/examples/fixture.json
 ```
 
 Malformed **model argument strings** produce failed checkpoint results in an HTTP 200 report. Invalid benchmark configuration or inconsistent capture records return 422. Use this endpoint for raw reliability experiments; the existing `/v1/agentscope/evaluate` endpoint still expects normalized, parseable tool arguments for its answer-quality metrics.
@@ -141,7 +143,7 @@ Repair and retry usage rates describe events, not quality scores. A repair recov
 ## Capture with AgentScope
 
 ```python
-from agentscope_eval.benchmarks.agentscope import ToolLoadingRecorder
+from evaluations.tool_loading.agentscope import ToolLoadingRecorder
 
 recorder = ToolLoadingRecorder()
 async for event in agent.reply_stream(user_msg):

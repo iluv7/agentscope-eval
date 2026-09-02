@@ -5,7 +5,7 @@ import json
 from copy import deepcopy
 from typing import Any
 
-from agentscope_eval.benchmarks.schemas import (
+from .schemas import (
     Attempt,
     Execution,
     RawCall,
