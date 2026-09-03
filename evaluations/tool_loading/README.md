@@ -4,6 +4,21 @@ This benchmark evaluates the reliability of AgentScope's proposed dynamic tool-l
 
 The first experiment is **nested argument generation**: compare native calls with an `execute_tool` envelope while giving the model the required schema directly. The second experiment adds discovery and real execution evidence to evaluate all four checkpoints.
 
+## Task dataset for real experiments
+
+The [argument generation dataset](datasets/README.md) provides 16 fixed tasks
+and four tool schemas for the native versus dispatcher comparison. It contains
+prompts and expected arguments, without model observations. Validate it with:
+
+```bash
+uv run python -m evaluations.tool_loading.dataset
+```
+
+A runner must still invoke the tested model and collect actual attempts.
+`GenerationDataset.make_trial()` joins those captures to the dataset labels
+for this evaluator. The task dataset is distinct from the synthetic scoring
+fixture below, which already contains injected observations.
+
 ## Run the included fixture
 
 Run these commands from the repository root. All suite-specific code, tests, examples, and documentation live in this directory. The shared service discovers this suite through `api.py`; `__main__.py` provides its standalone command.
