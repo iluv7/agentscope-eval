@@ -1,0 +1,336 @@
+{
+  "dataset_id": "tool-loading-arguments",
+  "version": "1.0.0",
+  "evaluation_scope": "generation",
+  "tools": [
+    {
+      "name": "record_text",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "additionalProperties": false,
+        "description": "Record text exactly, preserving every character."
+      }
+    },
+    {
+      "name": "record_items",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": false,
+        "description": "Record a list of strings, preserving order, duplicates, and empty elements."
+      }
+    },
+    {
+      "name": "record_options",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "count": {
+            "type": "integer"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "enabled",
+          "count",
+          "note"
+        ],
+        "additionalProperties": false,
+        "description": "Record typed options without converting boolean, integer, or null values."
+      }
+    },
+    {
+      "name": "record_tree",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "tree": {
+            "$ref": "#/$defs/node"
+          }
+        },
+        "required": [
+          "tree"
+        ],
+        "additionalProperties": false,
+        "description": "Record a labeled tree without changing its node labels or child order.",
+        "$defs": {
+          "node": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "children": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/node"
+                }
+              }
+            },
+            "required": [
+              "label",
+              "children"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "text_plain",
+      "scenario": "plain_text",
+      "input": "Call record_text exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"text\": \"hello\"\n}",
+      "target_tool": "record_text",
+      "expected_arguments": {
+        "text": "hello"
+      }
+    },
+    {
+      "case_id": "text_quotes_backslashes",
+      "scenario": "escaping",
+      "input": "Call record_text exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"text\": \"She said, \\\"keep \\\\ and / unchanged\\\". Path: C:\\\\Users\\\\demo\\\\notes.txt\"\n}",
+      "target_tool": "record_text",
+      "expected_arguments": {
+        "text": "She said, \"keep \\ and / unchanged\". Path: C:\\Users\\demo\\notes.txt"
+      }
+    },
+    {
+      "case_id": "text_whitespace_escapes",
+      "scenario": "whitespace",
+      "input": "Call record_text exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"text\": \"actual newline:\\nnext\\tcolumn\\r\\nCRLF; literal escapes: \\\\n \\\\t \\\\r\\\\n; trailing spaces:  \"\n}",
+      "target_tool": "record_text",
+      "expected_arguments": {
+        "text": "actual newline:\nnext\tcolumn\r\nCRLF; literal escapes: \\n \\t \\r\\n; trailing spaces:  "
+      }
+    },
+    {
+      "case_id": "text_unicode",
+      "scenario": "unicode",
+      "input": "Call record_text exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"text\": \"中文：你好；composed=café; combining=café; emoji=👩🏽‍💻 🚀; Greek=αβ\"\n}",
+      "target_tool": "record_text",
+      "expected_arguments": {
+        "text": "中文：你好；composed=café; combining=café; emoji=👩🏽‍💻 🚀; Greek=αβ"
+      }
+    },
+    {
+      "case_id": "text_code",
+      "scenario": "code_string",
+      "input": "Call record_text exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"text\": \"def render(name):\\n    return {\\\"path\\\": r\\\"C:\\\\tmp\\\", \\\"message\\\": f\\\"hello {name}\\\"}\\n\"\n}",
+      "target_tool": "record_text",
+      "expected_arguments": {
+        "text": "def render(name):\n    return {\"path\": r\"C:\\tmp\", \"message\": f\"hello {name}\"}\n"
+      }
+    },
+    {
+      "case_id": "text_json_string",
+      "scenario": "json_as_text",
+      "input": "Call record_text exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"text\": \"{\\\"enabled\\\":false,\\\"items\\\":[\\\"a\\\",\\\"b\\\"],\\\"note\\\":null}\"\n}",
+      "target_tool": "record_text",
+      "expected_arguments": {
+        "text": "{\"enabled\":false,\"items\":[\"a\",\"b\"],\"note\":null}"
+      }
+    },
+    {
+      "case_id": "text_empty",
+      "scenario": "empty_string",
+      "input": "Call record_text exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"text\": \"\"\n}",
+      "target_tool": "record_text",
+      "expected_arguments": {
+        "text": ""
+      }
+    },
+    {
+      "case_id": "text_long",
+      "scenario": "long_string",
+      "input": "Call record_text exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"text\": \"line-000: \\\"quoted\\\" \\\\ path\\tend\\nline-001: \\\"quoted\\\" \\\\ path\\tend\\nline-002: \\\"quoted\\\" \\\\ path\\tend\\nline-003: \\\"quoted\\\" \\\\ path\\tend\\nline-004: \\\"quoted\\\" \\\\ path\\tend\\nline-005: \\\"quoted\\\" \\\\ path\\tend\\nline-006: \\\"quoted\\\" \\\\ path\\tend\\nline-007: \\\"quoted\\\" \\\\ path\\tend\\nline-008: \\\"quoted\\\" \\\\ path\\tend\\nline-009: \\\"quoted\\\" \\\\ path\\tend\\nline-010: \\\"quoted\\\" \\\\ path\\tend\\nline-011: \\\"quoted\\\" \\\\ path\\tend\\nline-012: \\\"quoted\\\" \\\\ path\\tend\\nline-013: \\\"quoted\\\" \\\\ path\\tend\\nline-014: \\\"quoted\\\" \\\\ path\\tend\\nline-015: \\\"quoted\\\" \\\\ path\\tend\\nline-016: \\\"quoted\\\" \\\\ path\\tend\\nline-017: \\\"quoted\\\" \\\\ path\\tend\\nline-018: \\\"quoted\\\" \\\\ path\\tend\\nline-019: \\\"quoted\\\" \\\\ path\\tend\\nline-020: \\\"quoted\\\" \\\\ path\\tend\\nline-021: \\\"quoted\\\" \\\\ path\\tend\\nline-022: \\\"quoted\\\" \\\\ path\\tend\\nline-023: \\\"quoted\\\" \\\\ path\\tend\\nline-024: \\\"quoted\\\" \\\\ path\\tend\\nline-025: \\\"quoted\\\" \\\\ path\\tend\\nline-026: \\\"quoted\\\" \\\\ path\\tend\\nline-027: \\\"quoted\\\" \\\\ path\\tend\\nline-028: \\\"quoted\\\" \\\\ path\\tend\\nline-029: \\\"quoted\\\" \\\\ path\\tend\\nline-030: \\\"quoted\\\" \\\\ path\\tend\\nline-031: \\\"quoted\\\" \\\\ path\\tend\\nline-032: \\\"quoted\\\" \\\\ path\\tend\\nline-033: \\\"quoted\\\" \\\\ path\\tend\\nline-034: \\\"quoted\\\" \\\\ path\\tend\\nline-035: \\\"quoted\\\" \\\\ path\\tend\\nline-036: \\\"quoted\\\" \\\\ path\\tend\\nline-037: \\\"quoted\\\" \\\\ path\\tend\\nline-038: \\\"quoted\\\" \\\\ path\\tend\\nline-039: \\\"quoted\\\" \\\\ path\\tend\\nline-040: \\\"quoted\\\" \\\\ path\\tend\\nline-041: \\\"quoted\\\" \\\\ path\\tend\\nline-042: \\\"quoted\\\" \\\\ path\\tend\\nline-043: \\\"quoted\\\" \\\\ path\\tend\\nline-044: \\\"quoted\\\" \\\\ path\\tend\\nline-045: \\\"quoted\\\" \\\\ path\\tend\\nline-046: \\\"quoted\\\" \\\\ path\\tend\\nline-047: \\\"quoted\\\" \\\\ path\\tend\\nline-048: \\\"quoted\\\" \\\\ path\\tend\\nline-049: \\\"quoted\\\" \\\\ path\\tend\\nline-050: \\\"quoted\\\" \\\\ path\\tend\\nline-051: \\\"quoted\\\" \\\\ path\\tend\\nline-052: \\\"quoted\\\" \\\\ path\\tend\\nline-053: \\\"quoted\\\" \\\\ path\\tend\\nline-054: \\\"quoted\\\" \\\\ path\\tend\\nline-055: \\\"quoted\\\" \\\\ path\\tend\\nline-056: \\\"quoted\\\" \\\\ path\\tend\\nline-057: \\\"quoted\\\" \\\\ path\\tend\\nline-058: \\\"quoted\\\" \\\\ path\\tend\\nline-059: \\\"quoted\\\" \\\\ path\\tend\\nline-060: \\\"quoted\\\" \\\\ path\\tend\\nline-061: \\\"quoted\\\" \\\\ path\\tend\\nline-062: \\\"quoted\\\" \\\\ path\\tend\\nline-063: \\\"quoted\\\" \\\\ path\\tend\\nline-064: \\\"quoted\\\" \\\\ path\\tend\\nline-065: \\\"quoted\\\" \\\\ path\\tend\\nline-066: \\\"quoted\\\" \\\\ path\\tend\\nline-067: \\\"quoted\\\" \\\\ path\\tend\\nline-068: \\\"quoted\\\" \\\\ path\\tend\\nline-069: \\\"quoted\\\" \\\\ path\\tend\\nline-070: \\\"quoted\\\" \\\\ path\\tend\\nline-071: \\\"quoted\\\" \\\\ path\\tend\\nline-072: \\\"quoted\\\" \\\\ path\\tend\\nline-073: \\\"quoted\\\" \\\\ path\\tend\\nline-074: \\\"quoted\\\" \\\\ path\\tend\\nline-075: \\\"quoted\\\" \\\\ path\\tend\\nline-076: \\\"quoted\\\" \\\\ path\\tend\\nline-077: \\\"quoted\\\" \\\\ path\\tend\\nline-078: \\\"quoted\\\" \\\\ path\\tend\\nline-079: \\\"quoted\\\" \\\\ path\\tend\\n\"\n}",
+      "target_tool": "record_text",
+      "expected_arguments": {
+        "text": "line-000: \"quoted\" \\ path\tend\nline-001: \"quoted\" \\ path\tend\nline-002: \"quoted\" \\ path\tend\nline-003: \"quoted\" \\ path\tend\nline-004: \"quoted\" \\ path\tend\nline-005: \"quoted\" \\ path\tend\nline-006: \"quoted\" \\ path\tend\nline-007: \"quoted\" \\ path\tend\nline-008: \"quoted\" \\ path\tend\nline-009: \"quoted\" \\ path\tend\nline-010: \"quoted\" \\ path\tend\nline-011: \"quoted\" \\ path\tend\nline-012: \"quoted\" \\ path\tend\nline-013: \"quoted\" \\ path\tend\nline-014: \"quoted\" \\ path\tend\nline-015: \"quoted\" \\ path\tend\nline-016: \"quoted\" \\ path\tend\nline-017: \"quoted\" \\ path\tend\nline-018: \"quoted\" \\ path\tend\nline-019: \"quoted\" \\ path\tend\nline-020: \"quoted\" \\ path\tend\nline-021: \"quoted\" \\ path\tend\nline-022: \"quoted\" \\ path\tend\nline-023: \"quoted\" \\ path\tend\nline-024: \"quoted\" \\ path\tend\nline-025: \"quoted\" \\ path\tend\nline-026: \"quoted\" \\ path\tend\nline-027: \"quoted\" \\ path\tend\nline-028: \"quoted\" \\ path\tend\nline-029: \"quoted\" \\ path\tend\nline-030: \"quoted\" \\ path\tend\nline-031: \"quoted\" \\ path\tend\nline-032: \"quoted\" \\ path\tend\nline-033: \"quoted\" \\ path\tend\nline-034: \"quoted\" \\ path\tend\nline-035: \"quoted\" \\ path\tend\nline-036: \"quoted\" \\ path\tend\nline-037: \"quoted\" \\ path\tend\nline-038: \"quoted\" \\ path\tend\nline-039: \"quoted\" \\ path\tend\nline-040: \"quoted\" \\ path\tend\nline-041: \"quoted\" \\ path\tend\nline-042: \"quoted\" \\ path\tend\nline-043: \"quoted\" \\ path\tend\nline-044: \"quoted\" \\ path\tend\nline-045: \"quoted\" \\ path\tend\nline-046: \"quoted\" \\ path\tend\nline-047: \"quoted\" \\ path\tend\nline-048: \"quoted\" \\ path\tend\nline-049: \"quoted\" \\ path\tend\nline-050: \"quoted\" \\ path\tend\nline-051: \"quoted\" \\ path\tend\nline-052: \"quoted\" \\ path\tend\nline-053: \"quoted\" \\ path\tend\nline-054: \"quoted\" \\ path\tend\nline-055: \"quoted\" \\ path\tend\nline-056: \"quoted\" \\ path\tend\nline-057: \"quoted\" \\ path\tend\nline-058: \"quoted\" \\ path\tend\nline-059: \"quoted\" \\ path\tend\nline-060: \"quoted\" \\ path\tend\nline-061: \"quoted\" \\ path\tend\nline-062: \"quoted\" \\ path\tend\nline-063: \"quoted\" \\ path\tend\nline-064: \"quoted\" \\ path\tend\nline-065: \"quoted\" \\ path\tend\nline-066: \"quoted\" \\ path\tend\nline-067: \"quoted\" \\ path\tend\nline-068: \"quoted\" \\ path\tend\nline-069: \"quoted\" \\ path\tend\nline-070: \"quoted\" \\ path\tend\nline-071: \"quoted\" \\ path\tend\nline-072: \"quoted\" \\ path\tend\nline-073: \"quoted\" \\ path\tend\nline-074: \"quoted\" \\ path\tend\nline-075: \"quoted\" \\ path\tend\nline-076: \"quoted\" \\ path\tend\nline-077: \"quoted\" \\ path\tend\nline-078: \"quoted\" \\ path\tend\nline-079: \"quoted\" \\ path\tend\n"
+      }
+    },
+    {
+      "case_id": "items_escaped",
+      "scenario": "array_escaping",
+      "input": "Call record_items exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"items\": [\n    \"\",\n    \"\\\"quoted\\\"\",\n    \"C:\\\\tmp\\\\file\",\n    \"actual\\nnewline\",\n    \"literal\\\\n\",\n    \"中文 🚀\"\n  ]\n}",
+      "target_tool": "record_items",
+      "expected_arguments": {
+        "items": [
+          "",
+          "\"quoted\"",
+          "C:\\tmp\\file",
+          "actual\nnewline",
+          "literal\\n",
+          "中文 🚀"
+        ]
+      }
+    },
+    {
+      "case_id": "items_order_duplicates",
+      "scenario": "array_order",
+      "input": "Call record_items exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"items\": [\n    \"alpha\",\n    \"beta\",\n    \"alpha\",\n    \"\",\n    \"beta\"\n  ]\n}",
+      "target_tool": "record_items",
+      "expected_arguments": {
+        "items": [
+          "alpha",
+          "beta",
+          "alpha",
+          "",
+          "beta"
+        ]
+      }
+    },
+    {
+      "case_id": "items_empty",
+      "scenario": "empty_array",
+      "input": "Call record_items exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"items\": []\n}",
+      "target_tool": "record_items",
+      "expected_arguments": {
+        "items": []
+      }
+    },
+    {
+      "case_id": "options_false_zero_null",
+      "scenario": "scalar_types",
+      "input": "Call record_options exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"enabled\": false,\n  \"count\": 0,\n  \"note\": null\n}",
+      "target_tool": "record_options",
+      "expected_arguments": {
+        "enabled": false,
+        "count": 0,
+        "note": null
+      }
+    },
+    {
+      "case_id": "options_true_negative_empty",
+      "scenario": "scalar_types",
+      "input": "Call record_options exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"enabled\": true,\n  \"count\": -3,\n  \"note\": \"\"\n}",
+      "target_tool": "record_options",
+      "expected_arguments": {
+        "enabled": true,
+        "count": -3,
+        "note": ""
+      }
+    },
+    {
+      "case_id": "tree_depth_2",
+      "scenario": "nested_depth_2",
+      "input": "Call record_tree exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"tree\": {\n    \"label\": \"level-1\",\n    \"children\": [\n      {\n        \"label\": \"level-2\",\n        \"children\": []\n      }\n    ]\n  }\n}",
+      "target_tool": "record_tree",
+      "expected_arguments": {
+        "tree": {
+          "label": "level-1",
+          "children": [
+            {
+              "label": "level-2",
+              "children": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "tree_depth_8",
+      "scenario": "nested_depth_8",
+      "input": "Call record_tree exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"tree\": {\n    \"label\": \"level-1\",\n    \"children\": [\n      {\n        \"label\": \"level-2\",\n        \"children\": [\n          {\n            \"label\": \"level-3\",\n            \"children\": [\n              {\n                \"label\": \"level-4\",\n                \"children\": [\n                  {\n                    \"label\": \"level-5\",\n                    \"children\": [\n                      {\n                        \"label\": \"level-6\",\n                        \"children\": [\n                          {\n                            \"label\": \"level-7\",\n                            \"children\": [\n                              {\n                                \"label\": \"level-8\",\n                                \"children\": []\n                              }\n                            ]\n                          }\n                        ]\n                      }\n                    ]\n                  }\n                ]\n              }\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+      "target_tool": "record_tree",
+      "expected_arguments": {
+        "tree": {
+          "label": "level-1",
+          "children": [
+            {
+              "label": "level-2",
+              "children": [
+                {
+                  "label": "level-3",
+                  "children": [
+                    {
+                      "label": "level-4",
+                      "children": [
+                        {
+                          "label": "level-5",
+                          "children": [
+                            {
+                              "label": "level-6",
+                              "children": [
+                                {
+                                  "label": "level-7",
+                                  "children": [
+                                    {
+                                      "label": "level-8",
+                                      "children": []
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "tree_branching",
+      "scenario": "nested_branching",
+      "input": "Call record_tree exactly once using the available calling convention. Set its arguments to the JSON object below. Preserve all values, types, string characters, and array order; do not add fields.\n\n{\n  \"tree\": {\n    \"label\": \"root\",\n    \"children\": [\n      {\n        \"label\": \"left \\\"quoted\\\"\",\n        \"children\": []\n      },\n      {\n        \"label\": \"right\\\\branch\",\n        \"children\": [\n          {\n            \"label\": \"leaf\\n中文\",\n            \"children\": []\n          },\n          {\n            \"label\": \"\",\n            \"children\": []\n          }\n        ]\n      }\n    ]\n  }\n}",
+      "target_tool": "record_tree",
+      "expected_arguments": {
+        "tree": {
+          "label": "root",
+          "children": [
+            {
+              "label": "left \"quoted\"",
+              "children": []
+            },
+            {
+              "label": "right\\branch",
+              "children": [
+                {
+                  "label": "leaf\n中文",
+                  "children": []
+                },
+                {
+                  "label": "",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
