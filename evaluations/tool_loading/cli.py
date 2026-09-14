@@ -20,6 +20,10 @@ def render_markdown(report) -> str:
             return "N/A"
         return f"{counts.passed}/{counts.eligible} ({counts.rate:.1%})"
 
+    def quality(group, name):
+        value = group.search_quality.get(name)
+        return "N/A" if value is None else f"{value:.3f}"
+
     lines = [
         "# AgentScope tool-loading benchmark",
         "",
@@ -31,8 +35,8 @@ def render_markdown(report) -> str:
         "",
         "| Group | Provider / model | Variant | Source | Scenario | Runs | "
         "First JSON | First schema | First arguments | "
-        "First attempt | Eventual |",
-        "|---|---|---|---|---|---:|---|---|---|---|---|",
+        "First attempt | Eventual | Search R@K | Search P@K | MRR |",
+        "|---|---|---|---|---|---:|---|---|---|---|---|---:|---:|---:|",
     ]
     for index, group in enumerate(report.groups, 1):
         config = group.configuration
@@ -53,6 +57,9 @@ def render_markdown(report) -> str:
                     "eventual_success",
                 )
             ],
+            quality(group, "mean_recall_at_k"),
+            quality(group, "mean_precision_at_k"),
+            quality(group, "mean_reciprocal_rank"),
         ]
         lines.append("| " + " | ".join(cell(value) for value in values) + " |")
     lines.extend(

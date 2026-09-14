@@ -1,0 +1,1047 @@
+{
+  "dataset_id": "agentscope-tool-loading-full-trajectory",
+  "version": "1.0.0",
+  "search_k": 5,
+  "tools": [
+    {
+      "name": "store_text_blob",
+      "description": "Persist exact text with labels and return content metadata.",
+      "keywords": [
+        "store text",
+        "persist text",
+        "save exact text",
+        "text labels"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "text",
+          "labels"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "store_text"
+    },
+    {
+      "name": "count_text_blob",
+      "description": "Count and inspect a supplied text blob without choosing storage.",
+      "keywords": [
+        "count text",
+        "inspect text",
+        "text statistics",
+        "measure text"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "text",
+          "labels"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "store_text"
+    },
+    {
+      "name": "sum_integer_batch",
+      "description": "Add a batch of integers and optionally return its extrema.",
+      "keywords": [
+        "sum integers",
+        "integer total",
+        "add numbers",
+        "number extrema"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 1
+          },
+          "include_extrema": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "values",
+          "include_extrema"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "sum_integers"
+    },
+    {
+      "name": "average_integer_batch",
+      "description": "Analyze a batch of integers for average-oriented workflows.",
+      "keywords": [
+        "average integers",
+        "mean numbers",
+        "integer average",
+        "number analysis"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 1
+          },
+          "include_extrema": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "values",
+          "include_extrema"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "sum_integers"
+    },
+    {
+      "name": "format_contact_card",
+      "description": "Format a person's contact card from nested channels and tags.",
+      "keywords": [
+        "format contact card",
+        "contact display",
+        "email phone tags",
+        "person contact"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contact": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "minLength": 3
+              },
+              "phone": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "email",
+              "phone"
+            ],
+            "additionalProperties": false
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "contact",
+          "tags"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "format_contact"
+    },
+    {
+      "name": "export_contact_card",
+      "description": "Prepare contact-card data for an export workflow.",
+      "keywords": [
+        "export contact",
+        "contact csv",
+        "contact transfer",
+        "address export"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contact": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "minLength": 3
+              },
+              "phone": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "email",
+              "phone"
+            ],
+            "additionalProperties": false
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "contact",
+          "tags"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "format_contact"
+    },
+    {
+      "name": "flatten_label_tree",
+      "description": "Flatten a nested label tree in preorder and measure its depth.",
+      "keywords": [
+        "flatten tree",
+        "preorder labels",
+        "tree depth",
+        "nested label tree"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "tree": {
+            "$ref": "#/$defs/node"
+          }
+        },
+        "required": [
+          "tree"
+        ],
+        "additionalProperties": false,
+        "$defs": {
+          "node": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "children": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/node"
+                }
+              }
+            },
+            "required": [
+              "label",
+              "children"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "executor": "flatten_tree"
+    },
+    {
+      "name": "render_label_tree",
+      "description": "Prepare a nested label tree for a visual rendering workflow.",
+      "keywords": [
+        "render tree",
+        "tree diagram",
+        "visual hierarchy",
+        "draw label tree"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "tree": {
+            "$ref": "#/$defs/node"
+          }
+        },
+        "required": [
+          "tree"
+        ],
+        "additionalProperties": false,
+        "$defs": {
+          "node": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "children": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/node"
+                }
+              }
+            },
+            "required": [
+              "label",
+              "children"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "executor": "flatten_tree"
+    },
+    {
+      "name": "render_message_template",
+      "description": "Substitute named string values into a message template.",
+      "keywords": [
+        "render template",
+        "substitute variables",
+        "message template",
+        "fill placeholders"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "template": {
+            "type": "string"
+          },
+          "values": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "template",
+          "values"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "render_template"
+    },
+    {
+      "name": "validate_message_template",
+      "description": "Check a message template and its named placeholder values.",
+      "keywords": [
+        "validate template",
+        "check placeholders",
+        "template lint",
+        "missing variables"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "template": {
+            "type": "string"
+          },
+          "values": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "template",
+          "values"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "render_template"
+    },
+    {
+      "name": "build_file_manifest",
+      "description": "Build byte counts and SHA-256 checksums for supplied files.",
+      "keywords": [
+        "build file manifest",
+        "file checksums",
+        "hash files",
+        "content manifest"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "content"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "files"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "build_manifest"
+    },
+    {
+      "name": "verify_file_manifest",
+      "description": "Verify supplied file records for an existing manifest workflow.",
+      "keywords": [
+        "verify manifest",
+        "check checksums",
+        "audit files",
+        "manifest validation"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "content"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "files"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "build_manifest"
+    },
+    {
+      "name": "filter_inventory_items",
+      "description": "Select inventory items by minimum stock and optional maximum price.",
+      "keywords": [
+        "filter inventory",
+        "stock price filter",
+        "select products",
+        "inventory threshold"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sku": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "price_cents": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "sku",
+                "stock",
+                "price_cents"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "min_stock": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "max_price_cents": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          }
+        },
+        "required": [
+          "items",
+          "min_stock",
+          "max_price_cents"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "filter_inventory"
+    },
+    {
+      "name": "summarize_inventory_items",
+      "description": "Summarize inventory records for reporting and counting.",
+      "keywords": [
+        "inventory summary",
+        "count products",
+        "stock report",
+        "inventory totals"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sku": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "price_cents": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "sku",
+                "stock",
+                "price_cents"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "min_stock": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "max_price_cents": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          }
+        },
+        "required": [
+          "items",
+          "min_stock",
+          "max_price_cents"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "filter_inventory"
+    },
+    {
+      "name": "merge_runtime_settings",
+      "description": "Apply shallow configuration overrides to base runtime settings.",
+      "keywords": [
+        "merge settings",
+        "override configuration",
+        "apply overrides",
+        "runtime config"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "integer",
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "overrides": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "integer",
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        },
+        "required": [
+          "base",
+          "overrides"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "merge_settings"
+    },
+    {
+      "name": "validate_runtime_settings",
+      "description": "Validate base and override values before configuration changes.",
+      "keywords": [
+        "validate settings",
+        "check configuration",
+        "config lint",
+        "settings validation"
+      ],
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "integer",
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "overrides": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "integer",
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        },
+        "required": [
+          "base",
+          "overrides"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "merge_settings"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "store-escaped-unicode",
+      "scenario": "escaping_unicode",
+      "input": "Persist this text exactly, including newlines, quotes, Unicode, and the backslash path; attach labels unicode and escaping:\nLine one\nHe said: \"工具 ready\".\nPath C:\\tmp\\agent",
+      "reference_query": "persist exact text with labels",
+      "relevant_tools": [
+        "store_text_blob"
+      ],
+      "target_tool": "store_text_blob",
+      "expected_arguments": {
+        "text": "Line one\nHe said: \"工具 ready\".\nPath C:\\tmp\\agent",
+        "labels": [
+          "unicode",
+          "escaping"
+        ]
+      },
+      "expected_output": {
+        "characters": 47,
+        "lines": 3,
+        "labels": [
+          "unicode",
+          "escaping"
+        ],
+        "sha256": "0267703666ddd18dce588609c4c7153f0adc980b603b037f5f834d4170f9a39e"
+      }
+    },
+    {
+      "case_id": "store-json-as-text",
+      "scenario": "json_as_text",
+      "input": "Save the following JSON as literal text rather than parsing it, with labels json and literal: {\"nested\":{\"quote\":\"a\\\"b\"},\"ok\":true}",
+      "reference_query": "save literal text with labels",
+      "relevant_tools": [
+        "store_text_blob"
+      ],
+      "target_tool": "store_text_blob",
+      "expected_arguments": {
+        "text": "{\"nested\":{\"quote\":\"a\\\"b\"},\"ok\":true}",
+        "labels": [
+          "json",
+          "literal"
+        ]
+      },
+      "expected_output": {
+        "characters": 37,
+        "lines": 1,
+        "labels": [
+          "json",
+          "literal"
+        ],
+        "sha256": "196a7c76bb1fb30117e0f444c71f1a9bb1ca10a4e7956ab67ba90fbd152de13b"
+      }
+    },
+    {
+      "case_id": "sum-negative-extrema",
+      "scenario": "arrays_numbers",
+      "input": "Add these integers and include the minimum and maximum: -9, 0, 4, 12, -3.",
+      "reference_query": "sum integers with extrema",
+      "relevant_tools": [
+        "sum_integer_batch"
+      ],
+      "target_tool": "sum_integer_batch",
+      "expected_arguments": {
+        "values": [
+          -9,
+          0,
+          4,
+          12,
+          -3
+        ],
+        "include_extrema": true
+      },
+      "expected_output": {
+        "count": 5,
+        "sum": 4,
+        "min": -9,
+        "max": 12
+      }
+    },
+    {
+      "case_id": "sum-duplicates-no-extrema",
+      "scenario": "arrays_numbers",
+      "input": "Calculate the integer total for [7, 7, -2]. Do not include extrema.",
+      "reference_query": "integer total without extrema",
+      "relevant_tools": [
+        "sum_integer_batch"
+      ],
+      "target_tool": "sum_integer_batch",
+      "expected_arguments": {
+        "values": [
+          7,
+          7,
+          -2
+        ],
+        "include_extrema": false
+      },
+      "expected_output": {
+        "count": 3,
+        "sum": 12
+      }
+    },
+    {
+      "case_id": "contact-null-phone",
+      "scenario": "nested_null",
+      "input": "Create a contact display for Ada Lovelace. Email: ada@example.test. Phone is null. Preserve tags in this order: math, analytical engine.",
+      "reference_query": "format contact card with email phone tags",
+      "relevant_tools": [
+        "format_contact_card"
+      ],
+      "target_tool": "format_contact_card",
+      "expected_arguments": {
+        "name": "Ada Lovelace",
+        "contact": {
+          "email": "ada@example.test",
+          "phone": null
+        },
+        "tags": [
+          "math",
+          "analytical engine"
+        ]
+      },
+      "expected_output": {
+        "display": "Ada Lovelace <ada@example.test>",
+        "channels": [
+          "ada@example.test"
+        ],
+        "tag_count": 2
+      }
+    },
+    {
+      "case_id": "tree-deep-preorder",
+      "scenario": "recursive_objects",
+      "input": "Flatten this label tree in preorder and report its depth: root has children left and right; left has child leaf; right has no children.",
+      "reference_query": "flatten nested label tree preorder depth",
+      "relevant_tools": [
+        "flatten_label_tree"
+      ],
+      "target_tool": "flatten_label_tree",
+      "expected_arguments": {
+        "tree": {
+          "label": "root",
+          "children": [
+            {
+              "label": "left",
+              "children": [
+                {
+                  "label": "leaf",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "label": "right",
+              "children": []
+            }
+          ]
+        }
+      },
+      "expected_output": {
+        "labels": [
+          "root",
+          "left",
+          "leaf",
+          "right"
+        ],
+        "node_count": 4,
+        "max_depth": 3
+      }
+    },
+    {
+      "case_id": "tree-unicode-branch",
+      "scenario": "recursive_objects",
+      "input": "Flatten the hierarchy in preorder: 根 has children 甲 and 乙; 乙 has child γ. Measure node count and maximum depth.",
+      "reference_query": "flatten tree preorder labels depth",
+      "relevant_tools": [
+        "flatten_label_tree"
+      ],
+      "target_tool": "flatten_label_tree",
+      "expected_arguments": {
+        "tree": {
+          "label": "根",
+          "children": [
+            {
+              "label": "甲",
+              "children": []
+            },
+            {
+              "label": "乙",
+              "children": [
+                {
+                  "label": "γ",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected_output": {
+        "labels": [
+          "根",
+          "甲",
+          "乙",
+          "γ"
+        ],
+        "node_count": 4,
+        "max_depth": 3
+      }
+    },
+    {
+      "case_id": "template-special-values",
+      "scenario": "escaping_nested",
+      "input": "Render the template `Hello, {name}. Ticket {ticket} is {status}.` with name `A \\\"quoted\\\" user`, ticket `T-007`, and status `处理中`.",
+      "reference_query": "render message template substitute variables",
+      "relevant_tools": [
+        "render_message_template"
+      ],
+      "target_tool": "render_message_template",
+      "expected_arguments": {
+        "template": "Hello, {name}. Ticket {ticket} is {status}.",
+        "values": {
+          "name": "A \\\"quoted\\\" user",
+          "ticket": "T-007",
+          "status": "处理中"
+        }
+      },
+      "expected_output": {
+        "rendered": "Hello, A \\\"quoted\\\" user. Ticket T-007 is 处理中.",
+        "characters": 46
+      }
+    },
+    {
+      "case_id": "manifest-unicode-bytes",
+      "scenario": "nested_arrays",
+      "input": "Build a file manifest for two files in this order: path notes.txt with content `hello\\nworld` as a real newline, then path 数据.json with content `{\"ok\":true}`. Return byte counts and SHA-256 hashes.",
+      "reference_query": "build file manifest checksums content",
+      "relevant_tools": [
+        "build_file_manifest"
+      ],
+      "target_tool": "build_file_manifest",
+      "expected_arguments": {
+        "files": [
+          {
+            "path": "notes.txt",
+            "content": "hello\nworld"
+          },
+          {
+            "path": "数据.json",
+            "content": "{\"ok\":true}"
+          }
+        ]
+      },
+      "expected_output": {
+        "files": [
+          {
+            "path": "notes.txt",
+            "bytes": 11,
+            "sha256": "26c60a61d01db5836ca70fefd44a6a016620413c8ef5f259a6c5612d4f79d3b8"
+          },
+          {
+            "path": "数据.json",
+            "bytes": 11,
+            "sha256": "4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93"
+          }
+        ],
+        "total_bytes": 22
+      }
+    },
+    {
+      "case_id": "inventory-price-and-stock",
+      "scenario": "nested_arrays_null",
+      "input": "Filter these items, preserving order, to stock at least 2 and price at most 1500 cents: A(stock 4, price 1200), B(stock 1, price 900), C(stock 3, price 1700), D(stock 2, price 1500).",
+      "reference_query": "filter inventory by stock price",
+      "relevant_tools": [
+        "filter_inventory_items"
+      ],
+      "target_tool": "filter_inventory_items",
+      "expected_arguments": {
+        "items": [
+          {
+            "sku": "A",
+            "stock": 4,
+            "price_cents": 1200
+          },
+          {
+            "sku": "B",
+            "stock": 1,
+            "price_cents": 900
+          },
+          {
+            "sku": "C",
+            "stock": 3,
+            "price_cents": 1700
+          },
+          {
+            "sku": "D",
+            "stock": 2,
+            "price_cents": 1500
+          }
+        ],
+        "min_stock": 2,
+        "max_price_cents": 1500
+      },
+      "expected_output": {
+        "selected_skus": [
+          "A",
+          "D"
+        ],
+        "total_stock": 6
+      }
+    },
+    {
+      "case_id": "inventory-null-price",
+      "scenario": "nested_arrays_null",
+      "input": "Select inventory items with stock at least 1 and no maximum price: X(stock 0, price 5), Y(stock 1, price 9999), Z(stock 5, price 25).",
+      "reference_query": "filter inventory stock with no price limit",
+      "relevant_tools": [
+        "filter_inventory_items"
+      ],
+      "target_tool": "filter_inventory_items",
+      "expected_arguments": {
+        "items": [
+          {
+            "sku": "X",
+            "stock": 0,
+            "price_cents": 5
+          },
+          {
+            "sku": "Y",
+            "stock": 1,
+            "price_cents": 9999
+          },
+          {
+            "sku": "Z",
+            "stock": 5,
+            "price_cents": 25
+          }
+        ],
+        "min_stock": 1,
+        "max_price_cents": null
+      },
+      "expected_output": {
+        "selected_skus": [
+          "Y",
+          "Z"
+        ],
+        "total_stock": 6
+      }
+    },
+    {
+      "case_id": "settings-shallow-override",
+      "scenario": "objects_types",
+      "input": "Apply shallow overrides to runtime settings. Base is {\"region\":\"cn\",\"retries\":3,\"debug\":false,\"note\":null}; overrides are {\"retries\":0,\"debug\":true,\"mode\":\"safe\"}.",
+      "reference_query": "merge runtime settings apply overrides",
+      "relevant_tools": [
+        "merge_runtime_settings"
+      ],
+      "target_tool": "merge_runtime_settings",
+      "expected_arguments": {
+        "base": {
+          "region": "cn",
+          "retries": 3,
+          "debug": false,
+          "note": null
+        },
+        "overrides": {
+          "retries": 0,
+          "debug": true,
+          "mode": "safe"
+        }
+      },
+      "expected_output": {
+        "region": "cn",
+        "retries": 0,
+        "debug": true,
+        "note": null,
+        "mode": "safe"
+      }
+    }
+  ]
+}

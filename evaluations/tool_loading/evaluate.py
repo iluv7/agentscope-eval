@@ -104,10 +104,15 @@ def _search(attempt, trial, registry, k):
         checks["response_json_valid"] = False
         response = _checked(checks)
         response.recall_at_k = 0
+        response.precision_at_k = 0
+        response.reciprocal_rank = 0
         return generated, response
     names = [item["name"] for item in candidates]
+    relevant = set(trial.relevant_tools or [trial.target_tool])
+    top_names = names[:k]
+    relevant_found = relevant.intersection(top_names)
     checks["unique_candidates"] = len(names) == len(set(names))
-    checks["target_recalled"] = trial.target_tool in names[:k]
+    checks["target_recalled"] = trial.target_tool in top_names
     checks["schemas_match_registry"] = all(
         item["name"] in registry
         and json_equal(
@@ -116,8 +121,21 @@ def _search(attempt, trial, registry, k):
         for item in candidates
     )
     response = _checked(checks)
-    response.recall_at_k = float(
-        checks["search_succeeded"] and checks["target_recalled"]
+    search_succeeded = checks["search_succeeded"] is True
+    response.recall_at_k = (
+        len(relevant_found) / len(relevant) if search_succeeded else 0
+    )
+    response.precision_at_k = (
+        len(relevant_found) / len(top_names)
+        if search_succeeded and top_names
+        else 0
+    )
+    first_relevant = next(
+        (index for index, name in enumerate(top_names, 1) if name in relevant),
+        None,
+    )
+    response.reciprocal_rank = (
+        1 / first_relevant if search_succeeded and first_relevant else 0
     )
     return generated, response
 
@@ -225,6 +243,7 @@ def _check_status(checkpoint, check_name):
 def _summarize(trials, configuration=None, scenario=None):
     measures = defaultdict(list)
     stages = defaultdict(list)
+    search_quality = defaultdict(list)
     for trial in trials:
         first = trial.attempts[0]
         for name in ("json_valid", "tool_schema_valid", "arguments_correct"):
@@ -282,6 +301,10 @@ def _summarize(trials, configuration=None, scenario=None):
                 in ("not_reached", "not_applicable")
                 else _bool_status(attempt.search_response.recall_at_k == 1)
             )
+            for name in ("recall_at_k", "precision_at_k", "reciprocal_rank"):
+                value = getattr(attempt.search_response, name)
+                if value is not None:
+                    search_quality[name].append(value)
     latency = [
         t.telemetry.duration_ms
         for t in trials
@@ -319,6 +342,20 @@ def _summarize(trials, configuration=None, scenario=None):
         errors=sum(t.status == "error" for t in trials),
         metrics={name: _counts(values) for name, values in measures.items()},
         checkpoints={name: _counts(values) for name, values in stages.items()},
+        search_quality={
+            "samples": len(search_quality["recall_at_k"]),
+            **{
+                f"mean_{name}": sum(search_quality[name])
+                / len(search_quality[name])
+                if search_quality[name]
+                else None
+                for name in (
+                    "recall_at_k",
+                    "precision_at_k",
+                    "reciprocal_rank",
+                )
+            },
+        },
         telemetry=telemetry,
     )
 
@@ -357,6 +394,7 @@ def evaluate_tool_loading(request: BenchmarkRequest) -> BenchmarkReport:
                 configuration=trial.configuration,
                 repetition=trial.repetition,
                 target_tool=trial.target_tool,
+                relevant_tools=trial.relevant_tools or [trial.target_tool],
                 expected_arguments=trial.expected_arguments,
                 expected_output=trial.expected_output,
                 captured_attempts=len(trial.attempts),
