@@ -21,9 +21,13 @@ dependencies = [
   "referencing>=0.35,<1",
 ]
 
+[project.optional-dependencies]
+benchmark = ["agentscope>=2,<3"]
+
 [project.scripts]
 agentscope-eval = "agentscope_eval.cli:main"
 agentscope-eval-benchmark = "evaluations.tool_loading.cli:main"
+agentscope-eval-trajectory = "evaluations.tool_loading.trajectory_runner:main"
 
 [dependency-groups]
 dev = ["httpx>=0.28,<1", "pytest>=8,<10", "ruff>=0.12,<1"]

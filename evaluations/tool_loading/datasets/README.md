@@ -1,4 +1,44 @@
-# Argument generation dataset v1
+# Tool-loading datasets
+
+This directory contains two complementary profiles. Keep their results
+separate because they answer different questions.
+
+## Full trajectory v1
+
+`full_trajectory_v1.json` is the primary end-to-end profile for the proposed
+`search_tools` to `execute_tool` path. It contains 12 tasks and 16 executable
+catalog entries: eight target tools and eight similar distractors.
+
+Every case includes an unchanged user prompt, a reference search query,
+relevant-tool labels, the target tool, exact expected arguments, and the
+expected deterministic backend output. The loader validates every JSON Schema,
+recomputes every expected output, and checks that the reference query retrieves
+the target within K. The current coverage is:
+
+| Area | Cases | Argument pressure |
+|---|---:|---|
+| Exact text storage | 2 | Newlines, quotes, backslashes, Unicode, JSON-as-text, ordered labels |
+| Integer aggregation | 2 | Negative values, zero, duplicates, booleans |
+| Contact formatting | 1 | Nested object, null, ordered array |
+| Tree flattening | 2 | Recursive objects, branching, Unicode, preorder |
+| Template rendering | 1 | Nested map, placeholders, escaped values, Unicode |
+| File manifest | 1 | Nested array, real newline, UTF-8 byte counts, SHA-256 |
+| Inventory filtering | 2 | Nested arrays, boundary values, nullable price limit |
+| Runtime settings | 1 | Mixed scalar types, null, zero, shallow override semantics |
+
+Validate the dataset without a provider call:
+
+```bash
+uv run python -m evaluations.tool_loading.trajectory
+```
+
+The reference lexical search is part of the harness, rather than a claim about
+production retrieval quality. Model-generated queries are evaluated through
+that fixed search implementation using Recall@K, Precision@K, reciprocal rank,
+exact schema integrity, and target recall. The deterministic executors make the
+fourth checkpoint independently observable.
+
+## Argument generation v1
 
 A small, hand-designed benchmark for comparing native tool calls with the
 `execute_tool` envelope. The checked-in JSON is the reproducible source of

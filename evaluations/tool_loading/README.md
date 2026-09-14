@@ -1,6 +1,10 @@
 # Tool-loading benchmark
 
-This benchmark evaluates the reliability of AgentScope's proposed dynamic tool-loading path. It scores captured observations using strict JSON parsing, JSON Schema validation, and deterministic assertions. It never calls a model, repairs arguments, searches a registry on behalf of an agent, or executes a tool.
+This benchmark evaluates the reliability of AgentScope's proposed dynamic
+tool-loading path. The scorer uses strict JSON parsing, JSON Schema
+validation, and deterministic assertions. A separate trajectory runner calls
+an AgentScope model, searches the bundled test catalog, dispatches deterministic
+tools, and records the evidence consumed by the scorer.
 
 The first experiment is **nested argument generation**: compare native calls with an `execute_tool` envelope while giving the model the required schema directly. The second experiment adds discovery and real execution evidence to evaluate all four checkpoints.
 
@@ -18,6 +22,44 @@ A runner must still invoke the tested model and collect actual attempts.
 `GenerationDataset.make_trial()` joins those captures to the dataset labels
 for this evaluator. The task dataset is distinct from the synthetic scoring
 fixture below, which already contains injected observations.
+
+## Run the full four-checkpoint benchmark
+
+The bundled full-trajectory profile has 12 tasks and a catalog of 16 tools:
+eight target tools plus eight similar distractors. It covers exact text and
+escaping, Unicode, arrays, nested objects, recursive trees, null values, file
+hashes, inventory filters, and shallow configuration overrides. Validate all
+schemas, expected backend outputs, and reference searches without a model:
+
+```bash
+uv run python -m evaluations.tool_loading.trajectory
+```
+
+Install the optional AgentScope runner and execute it with DeepSeek:
+
+```bash
+uv sync --locked --extra benchmark
+export DEEPSEEK_API_KEY=your-key
+uv run --extra benchmark agentscope-eval-trajectory \
+  --output /tmp/tool-loading-observations.json \
+  --report /tmp/tool-loading-report.json \
+  --markdown /tmp/tool-loading-report.md
+```
+
+Each case makes two real model calls. The first exposes only `search_tools`;
+the generated query is run against the deterministic catalog. The second
+receives the actual search response in AgentScope message history and exposes
+only `execute_tool`. Valid envelopes are dispatched to a local deterministic
+executor, and its actual arguments, status, and output are recorded. The run
+therefore measures all four checkpoints without filling any observation from
+the labels.
+
+The runner is a harness for the proposed architecture because AgentScope does
+not yet provide `search_tools` and the generic `execute_tool` dispatcher as
+public built-ins. `run_trajectory()` accepts any non-streaming AgentScope chat
+model; the command-line adapter currently configures DeepSeek. Use
+`--tool-choice auto` for the primary benchmark, since forcing a tool would hide
+whether the model chose the required entry point.
 
 ## Run the included fixture
 
@@ -147,7 +189,12 @@ The report returns every attempt's raw evidence and separate repaired result, pl
 | `repair_recovery` | Among trials with a repair: at least one failed raw generation becomes a passing repaired generation |
 | `retry_used` | Per trial: more than one attempt was recorded |
 | `retry_recovery` | Among retried trials: the first effective attempt fails and a later attempt succeeds |
-| `search_recall_at_k` | Per discovery attempt: a successful search returns the target in the first K candidates |
+| `search_recall_at_k` | Per discovery attempt: a successful search returns all labeled relevant tools in the first K candidates |
+
+Discovery summaries also report mean Recall@K, Precision@K, and reciprocal
+rank. The stage still fails whenever the labeled target is absent, candidates
+are duplicated, a schema differs from the authoritative registry, or the
+search call/result is invalid.
 
 Checkpoint counts use attempts as their unit; first-attempt metrics use trials. With a single labeled target, Recall@K is binary for each search. Empty `attempts` contribute one failed generation opportunity, with `captured_attempts: 0` preserved in the report. Provider errors are separately counted as trial errors and remain in overall success denominators.
 
@@ -176,4 +223,6 @@ Use `record_execution(Execution(...))` at the real tool dispatch boundary to rec
 
 Call `record_model_tools(tools)` from the model-call hook if catalog fingerprints are useful, and `telemetry(duration_ms=...)` to export explicitly measured latency and usage. The current model-call count is the number of observed `ModelCallEndEvent` records; failed requests without an end event are not inferred.
 
-This package provides the recorder and evaluator. The tested AgentScope application supplies the model calls, search implementation, dispatcher, and test-tool environment.
+For an existing application, use the recorder with that application's search,
+dispatcher, and tool environment. The bundled trajectory runner provides a
+reproducible local reference harness for the proposed interface.

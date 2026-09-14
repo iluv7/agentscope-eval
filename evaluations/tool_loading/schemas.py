@@ -42,6 +42,7 @@ class Configuration(Contract):
     agentscope_version: str = Field(min_length=1)
     model_version: str | None = None
     strict_output: bool | None = None
+    tool_choice: Literal["auto", "required", "forced"] | None = None
     temperature: float | None = None
     seed: int | None = None
     catalog_version: str = "unspecified"
@@ -127,6 +128,7 @@ class Trial(Contract):
     configuration: Configuration
     repetition: int = Field(default=0, ge=0)
     target_tool: str
+    relevant_tools: list[str] | None = None
     expected_arguments: dict[str, Any]
     expected_output: Any = None
     attempts: list[Attempt] = Field(default_factory=list, max_length=50)
@@ -157,6 +159,11 @@ class Trial(Contract):
         ]
         if len(ids) != len(set(ids)):
             raise ValueError("Call IDs must be unique within a trial")
+        relevant = self.relevant_tools or [self.target_tool]
+        if self.target_tool not in relevant:
+            raise ValueError("relevant_tools must include target_tool")
+        if len(relevant) != len(set(relevant)):
+            raise ValueError("relevant_tools must be unique")
         return self
 
 
@@ -184,6 +191,15 @@ class BenchmarkRequest(Contract):
         for trial in self.trials:
             if trial.target_tool not in registry:
                 raise ValueError(f"Unknown target tool: {trial.target_tool}")
+            unknown_relevant = (
+                set(trial.relevant_tools or [trial.target_tool])
+                - registry.keys()
+            )
+            if unknown_relevant:
+                raise ValueError(
+                    "Unknown relevant tools: "
+                    + ", ".join(sorted(unknown_relevant))
+                )
             try:
                 valid = schema_matches(
                     trial.expected_arguments,
@@ -205,6 +221,8 @@ class Checkpoint(Contract):
     failures: list[str] = Field(default_factory=list)
     checks: dict[str, bool | None] = Field(default_factory=dict)
     recall_at_k: float | None = None
+    precision_at_k: float | None = None
+    reciprocal_rank: float | None = None
 
 
 class AttemptResult(Contract):
@@ -231,6 +249,7 @@ class TrialResult(Contract):
     configuration: Configuration
     repetition: int
     target_tool: str
+    relevant_tools: list[str]
     expected_arguments: dict[str, Any]
     expected_output: Any
     captured_attempts: int
@@ -261,6 +280,7 @@ class GroupSummary(Contract):
     errors: int
     metrics: dict[str, Counts]
     checkpoints: dict[str, Counts]
+    search_quality: dict[str, float | int | None]
     telemetry: dict[str, float | int | None]
 
 
