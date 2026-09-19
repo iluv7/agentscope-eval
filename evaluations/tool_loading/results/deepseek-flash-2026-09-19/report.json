@@ -1,0 +1,4823 @@
+{
+  "benchmark": "tool_loading",
+  "evaluator_version": "0.1.0",
+  "search_k": 5,
+  "tools": [
+    {
+      "name": "store_text_blob",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "text",
+          "labels"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "count_text_blob",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "text",
+          "labels"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "sum_integer_batch",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 1
+          },
+          "include_extrema": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "values",
+          "include_extrema"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "average_integer_batch",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 1
+          },
+          "include_extrema": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "values",
+          "include_extrema"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "format_contact_card",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contact": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "minLength": 3
+              },
+              "phone": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "email",
+              "phone"
+            ],
+            "additionalProperties": false
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "contact",
+          "tags"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "export_contact_card",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contact": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "minLength": 3
+              },
+              "phone": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "email",
+              "phone"
+            ],
+            "additionalProperties": false
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "contact",
+          "tags"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "flatten_label_tree",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "tree": {
+            "$ref": "#/$defs/node"
+          }
+        },
+        "required": [
+          "tree"
+        ],
+        "additionalProperties": false,
+        "$defs": {
+          "node": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "children": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/node"
+                }
+              }
+            },
+            "required": [
+              "label",
+              "children"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "name": "render_label_tree",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "tree": {
+            "$ref": "#/$defs/node"
+          }
+        },
+        "required": [
+          "tree"
+        ],
+        "additionalProperties": false,
+        "$defs": {
+          "node": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "children": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/node"
+                }
+              }
+            },
+            "required": [
+              "label",
+              "children"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "name": "render_message_template",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "template": {
+            "type": "string"
+          },
+          "values": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "template",
+          "values"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "validate_message_template",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "template": {
+            "type": "string"
+          },
+          "values": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "template",
+          "values"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "build_file_manifest",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "content"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "files"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "verify_file_manifest",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "content"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "files"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "filter_inventory_items",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sku": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "price_cents": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "sku",
+                "stock",
+                "price_cents"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "min_stock": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "max_price_cents": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          }
+        },
+        "required": [
+          "items",
+          "min_stock",
+          "max_price_cents"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "summarize_inventory_items",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sku": {
+                  "type": "string"
+                },
+                "stock": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "price_cents": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "sku",
+                "stock",
+                "price_cents"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "min_stock": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "max_price_cents": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          }
+        },
+        "required": [
+          "items",
+          "min_stock",
+          "max_price_cents"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "merge_runtime_settings",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "integer",
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "overrides": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "integer",
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        },
+        "required": [
+          "base",
+          "overrides"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "validate_runtime_settings",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "integer",
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "overrides": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number",
+                "integer",
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        },
+        "required": [
+          "base",
+          "overrides"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "trials": [
+    {
+      "run_id": "store-escaped-unicode-r0",
+      "case_id": "store-escaped-unicode",
+      "input": "Persist this text exactly, including newlines, quotes, Unicode, and the backslash path; attach labels unicode and escaping:\nLine one\nHe said: \"工具 ready\".\nPath C:\\tmp\\agent",
+      "scenario": "escaping_unicode",
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "repetition": 0,
+      "target_tool": "store_text_blob",
+      "relevant_tools": [
+        "store_text_blob"
+      ],
+      "expected_arguments": {
+        "text": "Line one\nHe said: \"工具 ready\".\nPath C:\\tmp\\agent",
+        "labels": [
+          "unicode",
+          "escaping"
+        ]
+      },
+      "expected_output": {
+        "characters": 47,
+        "lines": 3,
+        "labels": [
+          "unicode",
+          "escaping"
+        ],
+        "sha256": "0267703666ddd18dce588609c4c7153f0adc980b603b037f5f834d4170f9a39e"
+      },
+      "captured_attempts": 1,
+      "outcome": "completed",
+      "status": "passed",
+      "attempts": [
+        {
+          "index": 1,
+          "evidence": {
+            "search_call": {
+              "call_id": "search:call_00_GXjah6Jbt6GOyYK30h3T9821",
+              "name": "search_tools",
+              "arguments": "{\"query\": \"persist text exactly with newlines unicode and labels\"}",
+              "complete": true
+            },
+            "search_result": {
+              "call_id": "search:call_00_GXjah6Jbt6GOyYK30h3T9821",
+              "status": "success",
+              "raw_output": "{\"tools\":[{\"name\":\"store_text_blob\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"labels\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"text\",\"labels\"],\"additionalProperties\":false}},{\"name\":\"count_text_blob\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"labels\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"text\",\"labels\"],\"additionalProperties\":false}},{\"name\":\"flatten_label_tree\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"tree\":{\"$ref\":\"#/$defs/node\"}},\"required\":[\"tree\"],\"additionalProperties\":false,\"$defs\":{\"node\":{\"type\":\"object\",\"properties\":{\"label\":{\"type\":\"string\"},\"children\":{\"type\":\"array\",\"items\":{\"$ref\":\"#/$defs/node\"}}},\"required\":[\"label\",\"children\"],\"additionalProperties\":false}}}},{\"name\":\"build_file_manifest\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"files\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"},\"content\":{\"type\":\"string\"}},\"required\":[\"path\",\"content\"],\"additionalProperties\":false},\"minItems\":1}},\"required\":[\"files\"],\"additionalProperties\":false}},{\"name\":\"filter_inventory_items\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"sku\":{\"type\":\"string\"},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"price_cents\":{\"type\":\"integer\",\"minimum\":0}},\"required\":[\"sku\",\"stock\",\"price_cents\"],\"additionalProperties\":false}},\"min_stock\":{\"type\":\"integer\",\"minimum\":0},\"max_price_cents\":{\"type\":[\"integer\",\"null\"],\"minimum\":0}},\"required\":[\"items\",\"min_stock\",\"max_price_cents\"],\"additionalProperties\":false}}]}"
+            },
+            "call": {
+              "call_id": "execute:call_00_M9Fz9lI9YVDO7quib4W38101",
+              "name": "execute_tool",
+              "arguments": "{\"tool_name\": \"store_text_blob\", \"arguments\": {\"text\": \"Line one\\nHe said: \\\"工具 ready\\\".\\nPath C:\\\\tmp\\\\agent\", \"labels\": [\"unicode\", \"escaping\"]}}",
+              "complete": true
+            },
+            "repaired_arguments": null,
+            "execution": {
+              "call_id": "execute:call_00_M9Fz9lI9YVDO7quib4W38101",
+              "tool_name": "store_text_blob",
+              "arguments": {
+                "text": "Line one\nHe said: \"工具 ready\".\nPath C:\\tmp\\agent",
+                "labels": [
+                  "unicode",
+                  "escaping"
+                ]
+              },
+              "status": "success",
+              "output": {
+                "characters": 47,
+                "lines": 3,
+                "labels": [
+                  "unicode",
+                  "escaping"
+                ],
+                "sha256": "0267703666ddd18dce588609c4c7153f0adc980b603b037f5f834d4170f9a39e"
+              }
+            }
+          },
+          "search_generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "search_schema_valid": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "search_response": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "search_succeeded": true,
+              "response_json_valid": true,
+              "unique_candidates": true,
+              "target_recalled": true,
+              "schemas_match_registry": true
+            },
+            "recall_at_k": 1.0,
+            "precision_at_k": 0.2,
+            "reciprocal_rank": 1.0
+          },
+          "generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "envelope_valid": true,
+              "tool_name_correct": true,
+              "tool_registered": true,
+              "tool_schema_valid": true,
+              "arguments_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "repaired_generation": null,
+          "execution": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "execution_succeeded": true,
+              "dispatch_correct": true,
+              "executed_arguments_correct": true,
+              "output_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "first_pass": true,
+          "effective_pass": true
+        }
+      ],
+      "telemetry": {
+        "duration_ms": 1810.77,
+        "input_tokens": 1208,
+        "output_tokens": 139,
+        "cache_read_tokens": 0,
+        "model_calls": 2,
+        "top_level_tools_hashes": [
+          "b3c0b53e25060937ab0fc99d5dda0d3e630036cf4f79bc2592b042ee1bc899b0",
+          "972cb08d182a3fe9252e72241d4aaa9f352c7e61eece4bb06757782be3ab1a6c"
+        ]
+      }
+    },
+    {
+      "run_id": "store-json-as-text-r0",
+      "case_id": "store-json-as-text",
+      "input": "Save the following JSON as literal text rather than parsing it, with labels json and literal: {\"nested\":{\"quote\":\"a\\\"b\"},\"ok\":true}",
+      "scenario": "json_as_text",
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "repetition": 0,
+      "target_tool": "store_text_blob",
+      "relevant_tools": [
+        "store_text_blob"
+      ],
+      "expected_arguments": {
+        "text": "{\"nested\":{\"quote\":\"a\\\"b\"},\"ok\":true}",
+        "labels": [
+          "json",
+          "literal"
+        ]
+      },
+      "expected_output": {
+        "characters": 37,
+        "lines": 1,
+        "labels": [
+          "json",
+          "literal"
+        ],
+        "sha256": "196a7c76bb1fb30117e0f444c71f1a9bb1ca10a4e7956ab67ba90fbd152de13b"
+      },
+      "captured_attempts": 1,
+      "outcome": "completed",
+      "status": "passed",
+      "attempts": [
+        {
+          "index": 1,
+          "evidence": {
+            "search_call": {
+              "call_id": "search:call_00_DXKkTUqS6N1E8Lb0PNQC6246",
+              "name": "search_tools",
+              "arguments": "{\"query\": \"save text file with labels literal string content\"}",
+              "complete": true
+            },
+            "search_result": {
+              "call_id": "search:call_00_DXKkTUqS6N1E8Lb0PNQC6246",
+              "status": "success",
+              "raw_output": "{\"tools\":[{\"name\":\"store_text_blob\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"labels\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"text\",\"labels\"],\"additionalProperties\":false}},{\"name\":\"build_file_manifest\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"files\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"},\"content\":{\"type\":\"string\"}},\"required\":[\"path\",\"content\"],\"additionalProperties\":false},\"minItems\":1}},\"required\":[\"files\"],\"additionalProperties\":false}},{\"name\":\"count_text_blob\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"labels\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"text\",\"labels\"],\"additionalProperties\":false}},{\"name\":\"flatten_label_tree\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"tree\":{\"$ref\":\"#/$defs/node\"}},\"required\":[\"tree\"],\"additionalProperties\":false,\"$defs\":{\"node\":{\"type\":\"object\",\"properties\":{\"label\":{\"type\":\"string\"},\"children\":{\"type\":\"array\",\"items\":{\"$ref\":\"#/$defs/node\"}}},\"required\":[\"label\",\"children\"],\"additionalProperties\":false}}}},{\"name\":\"verify_file_manifest\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"files\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"},\"content\":{\"type\":\"string\"}},\"required\":[\"path\",\"content\"],\"additionalProperties\":false},\"minItems\":1}},\"required\":[\"files\"],\"additionalProperties\":false}}]}"
+            },
+            "call": {
+              "call_id": "execute:call_00_ai6ftzl6VO7OorWAg3HQ7437",
+              "name": "execute_tool",
+              "arguments": "{\"tool_name\": \"store_text_blob\", \"arguments\": {\"text\": \"{\\\"nested\\\":{\\\"quote\\\":\\\"a\\\\\\\"b\\\"},\\\"ok\\\":true}\", \"labels\": [\"json\", \"literal\"]}}",
+              "complete": true
+            },
+            "repaired_arguments": null,
+            "execution": {
+              "call_id": "execute:call_00_ai6ftzl6VO7OorWAg3HQ7437",
+              "tool_name": "store_text_blob",
+              "arguments": {
+                "text": "{\"nested\":{\"quote\":\"a\\\"b\"},\"ok\":true}",
+                "labels": [
+                  "json",
+                  "literal"
+                ]
+              },
+              "status": "success",
+              "output": {
+                "characters": 37,
+                "lines": 1,
+                "labels": [
+                  "json",
+                  "literal"
+                ],
+                "sha256": "196a7c76bb1fb30117e0f444c71f1a9bb1ca10a4e7956ab67ba90fbd152de13b"
+              }
+            }
+          },
+          "search_generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "search_schema_valid": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "search_response": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "search_succeeded": true,
+              "response_json_valid": true,
+              "unique_candidates": true,
+              "target_recalled": true,
+              "schemas_match_registry": true
+            },
+            "recall_at_k": 1.0,
+            "precision_at_k": 0.2,
+            "reciprocal_rank": 1.0
+          },
+          "generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "envelope_valid": true,
+              "tool_name_correct": true,
+              "tool_registered": true,
+              "tool_schema_valid": true,
+              "arguments_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "repaired_generation": null,
+          "execution": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "execution_succeeded": true,
+              "dispatch_correct": true,
+              "executed_arguments_correct": true,
+              "output_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "first_pass": true,
+          "effective_pass": true
+        }
+      ],
+      "telemetry": {
+        "duration_ms": 1721.12,
+        "input_tokens": 1131,
+        "output_tokens": 136,
+        "cache_read_tokens": 0,
+        "model_calls": 2,
+        "top_level_tools_hashes": [
+          "b3c0b53e25060937ab0fc99d5dda0d3e630036cf4f79bc2592b042ee1bc899b0",
+          "972cb08d182a3fe9252e72241d4aaa9f352c7e61eece4bb06757782be3ab1a6c"
+        ]
+      }
+    },
+    {
+      "run_id": "sum-negative-extrema-r0",
+      "case_id": "sum-negative-extrema",
+      "input": "Add these integers and include the minimum and maximum: -9, 0, 4, 12, -3.",
+      "scenario": "arrays_numbers",
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "repetition": 0,
+      "target_tool": "sum_integer_batch",
+      "relevant_tools": [
+        "sum_integer_batch"
+      ],
+      "expected_arguments": {
+        "values": [
+          -9,
+          0,
+          4,
+          12,
+          -3
+        ],
+        "include_extrema": true
+      },
+      "expected_output": {
+        "count": 5,
+        "sum": 4,
+        "min": -9,
+        "max": 12
+      },
+      "captured_attempts": 1,
+      "outcome": "completed",
+      "status": "passed",
+      "attempts": [
+        {
+          "index": 1,
+          "evidence": {
+            "search_call": {
+              "call_id": "search:call_00_BCVIsjs8pLERFYgIXyNS0942",
+              "name": "search_tools",
+              "arguments": "{\"query\": \"add integers and find minimum and maximum of a list of numbers\"}",
+              "complete": true
+            },
+            "search_result": {
+              "call_id": "search:call_00_BCVIsjs8pLERFYgIXyNS0942",
+              "status": "success",
+              "raw_output": "{\"tools\":[{\"name\":\"sum_integer_batch\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"values\":{\"type\":\"array\",\"items\":{\"type\":\"integer\"},\"minItems\":1},\"include_extrema\":{\"type\":\"boolean\"}},\"required\":[\"values\",\"include_extrema\"],\"additionalProperties\":false}},{\"name\":\"average_integer_batch\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"values\":{\"type\":\"array\",\"items\":{\"type\":\"integer\"},\"minItems\":1},\"include_extrema\":{\"type\":\"boolean\"}},\"required\":[\"values\",\"include_extrema\"],\"additionalProperties\":false}},{\"name\":\"filter_inventory_items\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"sku\":{\"type\":\"string\"},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"price_cents\":{\"type\":\"integer\",\"minimum\":0}},\"required\":[\"sku\",\"stock\",\"price_cents\"],\"additionalProperties\":false}},\"min_stock\":{\"type\":\"integer\",\"minimum\":0},\"max_price_cents\":{\"type\":[\"integer\",\"null\"],\"minimum\":0}},\"required\":[\"items\",\"min_stock\",\"max_price_cents\"],\"additionalProperties\":false}},{\"name\":\"count_text_blob\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"labels\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"text\",\"labels\"],\"additionalProperties\":false}},{\"name\":\"flatten_label_tree\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"tree\":{\"$ref\":\"#/$defs/node\"}},\"required\":[\"tree\"],\"additionalProperties\":false,\"$defs\":{\"node\":{\"type\":\"object\",\"properties\":{\"label\":{\"type\":\"string\"},\"children\":{\"type\":\"array\",\"items\":{\"$ref\":\"#/$defs/node\"}}},\"required\":[\"label\",\"children\"],\"additionalProperties\":false}}}}]}"
+            },
+            "call": {
+              "call_id": "execute:call_00_3BZ1EXkXDueID0lJtW111592",
+              "name": "execute_tool",
+              "arguments": "{\"tool_name\": \"sum_integer_batch\", \"arguments\": {\"values\": [-9, 0, 4, 12, -3], \"include_extrema\": true}}",
+              "complete": true
+            },
+            "repaired_arguments": null,
+            "execution": {
+              "call_id": "execute:call_00_3BZ1EXkXDueID0lJtW111592",
+              "tool_name": "sum_integer_batch",
+              "arguments": {
+                "values": [
+                  -9,
+                  0,
+                  4,
+                  12,
+                  -3
+                ],
+                "include_extrema": true
+              },
+              "status": "success",
+              "output": {
+                "count": 5,
+                "sum": 4,
+                "min": -9,
+                "max": 12
+              }
+            }
+          },
+          "search_generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "search_schema_valid": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "search_response": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "search_succeeded": true,
+              "response_json_valid": true,
+              "unique_candidates": true,
+              "target_recalled": true,
+              "schemas_match_registry": true
+            },
+            "recall_at_k": 1.0,
+            "precision_at_k": 0.2,
+            "reciprocal_rank": 1.0
+          },
+          "generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "envelope_valid": true,
+              "tool_name_correct": true,
+              "tool_registered": true,
+              "tool_schema_valid": true,
+              "arguments_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "repaired_generation": null,
+          "execution": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "execution_succeeded": true,
+              "dispatch_correct": true,
+              "executed_arguments_correct": true,
+              "output_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "first_pass": true,
+          "effective_pass": true
+        }
+      ],
+      "telemetry": {
+        "duration_ms": 1623.42,
+        "input_tokens": 1168,
+        "output_tokens": 131,
+        "cache_read_tokens": 0,
+        "model_calls": 2,
+        "top_level_tools_hashes": [
+          "b3c0b53e25060937ab0fc99d5dda0d3e630036cf4f79bc2592b042ee1bc899b0",
+          "972cb08d182a3fe9252e72241d4aaa9f352c7e61eece4bb06757782be3ab1a6c"
+        ]
+      }
+    },
+    {
+      "run_id": "sum-duplicates-no-extrema-r0",
+      "case_id": "sum-duplicates-no-extrema",
+      "input": "Calculate the integer total for [7, 7, -2]. Do not include extrema.",
+      "scenario": "arrays_numbers",
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "repetition": 0,
+      "target_tool": "sum_integer_batch",
+      "relevant_tools": [
+        "sum_integer_batch"
+      ],
+      "expected_arguments": {
+        "values": [
+          7,
+          7,
+          -2
+        ],
+        "include_extrema": false
+      },
+      "expected_output": {
+        "count": 3,
+        "sum": 12
+      },
+      "captured_attempts": 1,
+      "outcome": "completed",
+      "status": "passed",
+      "attempts": [
+        {
+          "index": 1,
+          "evidence": {
+            "search_call": {
+              "call_id": "search:call_00_1K2AQzOqeFISDCXYvQL88395",
+              "name": "search_tools",
+              "arguments": "{\"query\": \"calculate integer total sum of a list of numbers excluding extrema\"}",
+              "complete": true
+            },
+            "search_result": {
+              "call_id": "search:call_00_1K2AQzOqeFISDCXYvQL88395",
+              "status": "success",
+              "raw_output": "{\"tools\":[{\"name\":\"sum_integer_batch\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"values\":{\"type\":\"array\",\"items\":{\"type\":\"integer\"},\"minItems\":1},\"include_extrema\":{\"type\":\"boolean\"}},\"required\":[\"values\",\"include_extrema\"],\"additionalProperties\":false}},{\"name\":\"average_integer_batch\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"values\":{\"type\":\"array\",\"items\":{\"type\":\"integer\"},\"minItems\":1},\"include_extrema\":{\"type\":\"boolean\"}},\"required\":[\"values\",\"include_extrema\"],\"additionalProperties\":false}},{\"name\":\"count_text_blob\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"labels\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"text\",\"labels\"],\"additionalProperties\":false}},{\"name\":\"flatten_label_tree\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"tree\":{\"$ref\":\"#/$defs/node\"}},\"required\":[\"tree\"],\"additionalProperties\":false,\"$defs\":{\"node\":{\"type\":\"object\",\"properties\":{\"label\":{\"type\":\"string\"},\"children\":{\"type\":\"array\",\"items\":{\"$ref\":\"#/$defs/node\"}}},\"required\":[\"label\",\"children\"],\"additionalProperties\":false}}}},{\"name\":\"format_contact_card\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"contact\":{\"type\":\"object\",\"properties\":{\"email\":{\"type\":\"string\",\"minLength\":3},\"phone\":{\"type\":[\"string\",\"null\"]}},\"required\":[\"email\",\"phone\"],\"additionalProperties\":false},\"tags\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"name\",\"contact\",\"tags\"],\"additionalProperties\":false}}]}"
+            },
+            "call": {
+              "call_id": "execute:call_00_0J62wkQoVtJ2BYkyawAT2125",
+              "name": "execute_tool",
+              "arguments": "{\"tool_name\": \"sum_integer_batch\", \"arguments\": {\"values\": [7, 7, -2], \"include_extrema\": false}}",
+              "complete": true
+            },
+            "repaired_arguments": null,
+            "execution": {
+              "call_id": "execute:call_00_0J62wkQoVtJ2BYkyawAT2125",
+              "tool_name": "sum_integer_batch",
+              "arguments": {
+                "values": [
+                  7,
+                  7,
+                  -2
+                ],
+                "include_extrema": false
+              },
+              "status": "success",
+              "output": {
+                "count": 3,
+                "sum": 12
+              }
+            }
+          },
+          "search_generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "search_schema_valid": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "search_response": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "search_succeeded": true,
+              "response_json_valid": true,
+              "unique_candidates": true,
+              "target_recalled": true,
+              "schemas_match_registry": true
+            },
+            "recall_at_k": 1.0,
+            "precision_at_k": 0.2,
+            "reciprocal_rank": 1.0
+          },
+          "generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "envelope_valid": true,
+              "tool_name_correct": true,
+              "tool_registered": true,
+              "tool_schema_valid": true,
+              "arguments_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "repaired_generation": null,
+          "execution": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "execution_succeeded": true,
+              "dispatch_correct": true,
+              "executed_arguments_correct": true,
+              "output_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "first_pass": true,
+          "effective_pass": true
+        }
+      ],
+      "telemetry": {
+        "duration_ms": 1437.08,
+        "input_tokens": 1131,
+        "output_tokens": 125,
+        "cache_read_tokens": 0,
+        "model_calls": 2,
+        "top_level_tools_hashes": [
+          "b3c0b53e25060937ab0fc99d5dda0d3e630036cf4f79bc2592b042ee1bc899b0",
+          "972cb08d182a3fe9252e72241d4aaa9f352c7e61eece4bb06757782be3ab1a6c"
+        ]
+      }
+    },
+    {
+      "run_id": "contact-null-phone-r0",
+      "case_id": "contact-null-phone",
+      "input": "Create a contact display for Ada Lovelace. Email: ada@example.test. Phone is null. Preserve tags in this order: math, analytical engine.",
+      "scenario": "nested_null",
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "repetition": 0,
+      "target_tool": "format_contact_card",
+      "relevant_tools": [
+        "format_contact_card"
+      ],
+      "expected_arguments": {
+        "name": "Ada Lovelace",
+        "contact": {
+          "email": "ada@example.test",
+          "phone": null
+        },
+        "tags": [
+          "math",
+          "analytical engine"
+        ]
+      },
+      "expected_output": {
+        "display": "Ada Lovelace <ada@example.test>",
+        "channels": [
+          "ada@example.test"
+        ],
+        "tag_count": 2
+      },
+      "captured_attempts": 1,
+      "outcome": "completed",
+      "status": "passed",
+      "attempts": [
+        {
+          "index": 1,
+          "evidence": {
+            "search_call": {
+              "call_id": "search:call_00_46yqt5XTekVDMcvryDuS6872",
+              "name": "search_tools",
+              "arguments": "{\"query\": \"create contact display with email phone tags\"}",
+              "complete": true
+            },
+            "search_result": {
+              "call_id": "search:call_00_46yqt5XTekVDMcvryDuS6872",
+              "status": "success",
+              "raw_output": "{\"tools\":[{\"name\":\"format_contact_card\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"contact\":{\"type\":\"object\",\"properties\":{\"email\":{\"type\":\"string\",\"minLength\":3},\"phone\":{\"type\":[\"string\",\"null\"]}},\"required\":[\"email\",\"phone\"],\"additionalProperties\":false},\"tags\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"name\",\"contact\",\"tags\"],\"additionalProperties\":false}},{\"name\":\"export_contact_card\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"name\":{\"type\":\"string\",\"minLength\":1},\"contact\":{\"type\":\"object\",\"properties\":{\"email\":{\"type\":\"string\",\"minLength\":3},\"phone\":{\"type\":[\"string\",\"null\"]}},\"required\":[\"email\",\"phone\"],\"additionalProperties\":false},\"tags\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"name\",\"contact\",\"tags\"],\"additionalProperties\":false}},{\"name\":\"store_text_blob\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"labels\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"text\",\"labels\"],\"additionalProperties\":false}}]}"
+            },
+            "call": {
+              "call_id": "execute:call_00_Adqll0YNqWApSsIJ17T28404",
+              "name": "execute_tool",
+              "arguments": "{\"tool_name\": \"format_contact_card\", \"arguments\": {\"name\": \"Ada Lovelace\", \"contact\": {\"email\": \"ada@example.test\", \"phone\": null}, \"tags\": [\"math\", \"analytical engine\"]}}",
+              "complete": true
+            },
+            "repaired_arguments": null,
+            "execution": {
+              "call_id": "execute:call_00_Adqll0YNqWApSsIJ17T28404",
+              "tool_name": "format_contact_card",
+              "arguments": {
+                "name": "Ada Lovelace",
+                "contact": {
+                  "email": "ada@example.test",
+                  "phone": null
+                },
+                "tags": [
+                  "math",
+                  "analytical engine"
+                ]
+              },
+              "status": "success",
+              "output": {
+                "display": "Ada Lovelace <ada@example.test>",
+                "channels": [
+                  "ada@example.test"
+                ],
+                "tag_count": 2
+              }
+            }
+          },
+          "search_generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "search_schema_valid": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "search_response": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "search_succeeded": true,
+              "response_json_valid": true,
+              "unique_candidates": true,
+              "target_recalled": true,
+              "schemas_match_registry": true
+            },
+            "recall_at_k": 1.0,
+            "precision_at_k": 0.3333333333333333,
+            "reciprocal_rank": 1.0
+          },
+          "generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "envelope_valid": true,
+              "tool_name_correct": true,
+              "tool_registered": true,
+              "tool_schema_valid": true,
+              "arguments_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "repaired_generation": null,
+          "execution": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "execution_succeeded": true,
+              "dispatch_correct": true,
+              "executed_arguments_correct": true,
+              "output_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "first_pass": true,
+          "effective_pass": true
+        }
+      ],
+      "telemetry": {
+        "duration_ms": 1301.69,
+        "input_tokens": 1036,
+        "output_tokens": 138,
+        "cache_read_tokens": 256,
+        "model_calls": 2,
+        "top_level_tools_hashes": [
+          "b3c0b53e25060937ab0fc99d5dda0d3e630036cf4f79bc2592b042ee1bc899b0",
+          "972cb08d182a3fe9252e72241d4aaa9f352c7e61eece4bb06757782be3ab1a6c"
+        ]
+      }
+    },
+    {
+      "run_id": "tree-deep-preorder-r0",
+      "case_id": "tree-deep-preorder",
+      "input": "Flatten this label tree in preorder and report its depth: root has children left and right; left has child leaf; right has no children.",
+      "scenario": "recursive_objects",
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "repetition": 0,
+      "target_tool": "flatten_label_tree",
+      "relevant_tools": [
+        "flatten_label_tree"
+      ],
+      "expected_arguments": {
+        "tree": {
+          "label": "root",
+          "children": [
+            {
+              "label": "left",
+              "children": [
+                {
+                  "label": "leaf",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "label": "right",
+              "children": []
+            }
+          ]
+        }
+      },
+      "expected_output": {
+        "labels": [
+          "root",
+          "left",
+          "leaf",
+          "right"
+        ],
+        "node_count": 4,
+        "max_depth": 3
+      },
+      "captured_attempts": 1,
+      "outcome": "completed",
+      "status": "passed",
+      "attempts": [
+        {
+          "index": 1,
+          "evidence": {
+            "search_call": {
+              "call_id": "search:call_00_X7BPzmuJV4ybXkBvmx1E5694",
+              "name": "search_tools",
+              "arguments": "{\"query\": \"flatten tree preorder traversal depth\"}",
+              "complete": true
+            },
+            "search_result": {
+              "call_id": "search:call_00_X7BPzmuJV4ybXkBvmx1E5694",
+              "status": "success",
+              "raw_output": "{\"tools\":[{\"name\":\"flatten_label_tree\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"tree\":{\"$ref\":\"#/$defs/node\"}},\"required\":[\"tree\"],\"additionalProperties\":false,\"$defs\":{\"node\":{\"type\":\"object\",\"properties\":{\"label\":{\"type\":\"string\"},\"children\":{\"type\":\"array\",\"items\":{\"$ref\":\"#/$defs/node\"}}},\"required\":[\"label\",\"children\"],\"additionalProperties\":false}}}},{\"name\":\"render_label_tree\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"tree\":{\"$ref\":\"#/$defs/node\"}},\"required\":[\"tree\"],\"additionalProperties\":false,\"$defs\":{\"node\":{\"type\":\"object\",\"properties\":{\"label\":{\"type\":\"string\"},\"children\":{\"type\":\"array\",\"items\":{\"$ref\":\"#/$defs/node\"}}},\"required\":[\"label\",\"children\"],\"additionalProperties\":false}}}}]}"
+            },
+            "call": {
+              "call_id": "execute:call_00_o9p9LU3pPevJ8X5c5D9c1889",
+              "name": "execute_tool",
+              "arguments": "{\"tool_name\": \"flatten_label_tree\", \"arguments\": {\"tree\": {\"label\": \"root\", \"children\": [{\"label\": \"left\", \"children\": [{\"label\": \"leaf\", \"children\": []}]}, {\"label\": \"right\", \"children\": []}]}}}",
+              "complete": true
+            },
+            "repaired_arguments": null,
+            "execution": {
+              "call_id": "execute:call_00_o9p9LU3pPevJ8X5c5D9c1889",
+              "tool_name": "flatten_label_tree",
+              "arguments": {
+                "tree": {
+                  "label": "root",
+                  "children": [
+                    {
+                      "label": "left",
+                      "children": [
+                        {
+                          "label": "leaf",
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "label": "right",
+                      "children": []
+                    }
+                  ]
+                }
+              },
+              "status": "success",
+              "output": {
+                "labels": [
+                  "root",
+                  "left",
+                  "leaf",
+                  "right"
+                ],
+                "node_count": 4,
+                "max_depth": 3
+              }
+            }
+          },
+          "search_generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "search_schema_valid": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "search_response": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "search_succeeded": true,
+              "response_json_valid": true,
+              "unique_candidates": true,
+              "target_recalled": true,
+              "schemas_match_registry": true
+            },
+            "recall_at_k": 1.0,
+            "precision_at_k": 0.5,
+            "reciprocal_rank": 1.0
+          },
+          "generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "envelope_valid": true,
+              "tool_name_correct": true,
+              "tool_registered": true,
+              "tool_schema_valid": true,
+              "arguments_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "repaired_generation": null,
+          "execution": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "execution_succeeded": true,
+              "dispatch_correct": true,
+              "executed_arguments_correct": true,
+              "output_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "first_pass": true,
+          "effective_pass": true
+        }
+      ],
+      "telemetry": {
+        "duration_ms": 1470.62,
+        "input_tokens": 956,
+        "output_tokens": 147,
+        "cache_read_tokens": 256,
+        "model_calls": 2,
+        "top_level_tools_hashes": [
+          "b3c0b53e25060937ab0fc99d5dda0d3e630036cf4f79bc2592b042ee1bc899b0",
+          "972cb08d182a3fe9252e72241d4aaa9f352c7e61eece4bb06757782be3ab1a6c"
+        ]
+      }
+    },
+    {
+      "run_id": "tree-unicode-branch-r0",
+      "case_id": "tree-unicode-branch",
+      "input": "Flatten the hierarchy in preorder: 根 has children 甲 and 乙; 乙 has child γ. Measure node count and maximum depth.",
+      "scenario": "recursive_objects",
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "repetition": 0,
+      "target_tool": "flatten_label_tree",
+      "relevant_tools": [
+        "flatten_label_tree"
+      ],
+      "expected_arguments": {
+        "tree": {
+          "label": "根",
+          "children": [
+            {
+              "label": "甲",
+              "children": []
+            },
+            {
+              "label": "乙",
+              "children": [
+                {
+                  "label": "γ",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected_output": {
+        "labels": [
+          "根",
+          "甲",
+          "乙",
+          "γ"
+        ],
+        "node_count": 4,
+        "max_depth": 3
+      },
+      "captured_attempts": 1,
+      "outcome": "completed",
+      "status": "passed",
+      "attempts": [
+        {
+          "index": 1,
+          "evidence": {
+            "search_call": {
+              "call_id": "search:call_00_QvljMRe0H2dtMFncWs689380",
+              "name": "search_tools",
+              "arguments": "{\"query\": \"flatten tree hierarchy preorder traversal node count maximum depth\"}",
+              "complete": true
+            },
+            "search_result": {
+              "call_id": "search:call_00_QvljMRe0H2dtMFncWs689380",
+              "status": "success",
+              "raw_output": "{\"tools\":[{\"name\":\"flatten_label_tree\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"tree\":{\"$ref\":\"#/$defs/node\"}},\"required\":[\"tree\"],\"additionalProperties\":false,\"$defs\":{\"node\":{\"type\":\"object\",\"properties\":{\"label\":{\"type\":\"string\"},\"children\":{\"type\":\"array\",\"items\":{\"$ref\":\"#/$defs/node\"}}},\"required\":[\"label\",\"children\"],\"additionalProperties\":false}}}},{\"name\":\"render_label_tree\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"tree\":{\"$ref\":\"#/$defs/node\"}},\"required\":[\"tree\"],\"additionalProperties\":false,\"$defs\":{\"node\":{\"type\":\"object\",\"properties\":{\"label\":{\"type\":\"string\"},\"children\":{\"type\":\"array\",\"items\":{\"$ref\":\"#/$defs/node\"}}},\"required\":[\"label\",\"children\"],\"additionalProperties\":false}}}},{\"name\":\"count_text_blob\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"labels\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"text\",\"labels\"],\"additionalProperties\":false}},{\"name\":\"summarize_inventory_items\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"sku\":{\"type\":\"string\"},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"price_cents\":{\"type\":\"integer\",\"minimum\":0}},\"required\":[\"sku\",\"stock\",\"price_cents\"],\"additionalProperties\":false}},\"min_stock\":{\"type\":\"integer\",\"minimum\":0},\"max_price_cents\":{\"type\":[\"integer\",\"null\"],\"minimum\":0}},\"required\":[\"items\",\"min_stock\",\"max_price_cents\"],\"additionalProperties\":false}},{\"name\":\"filter_inventory_items\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"sku\":{\"type\":\"string\"},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"price_cents\":{\"type\":\"integer\",\"minimum\":0}},\"required\":[\"sku\",\"stock\",\"price_cents\"],\"additionalProperties\":false}},\"min_stock\":{\"type\":\"integer\",\"minimum\":0},\"max_price_cents\":{\"type\":[\"integer\",\"null\"],\"minimum\":0}},\"required\":[\"items\",\"min_stock\",\"max_price_cents\"],\"additionalProperties\":false}}]}"
+            },
+            "call": {
+              "call_id": "execute:call_00_OH8172HbHjIKvsegGFON2157",
+              "name": "execute_tool",
+              "arguments": "{\"tool_name\": \"flatten_label_tree\", \"arguments\": {\"tree\": {\"label\": \"根\", \"children\": [{\"label\": \"甲\", \"children\": []}, {\"label\": \"乙\", \"children\": [{\"label\": \"γ\", \"children\": []}]}]}}}",
+              "complete": true
+            },
+            "repaired_arguments": null,
+            "execution": {
+              "call_id": "execute:call_00_OH8172HbHjIKvsegGFON2157",
+              "tool_name": "flatten_label_tree",
+              "arguments": {
+                "tree": {
+                  "label": "根",
+                  "children": [
+                    {
+                      "label": "甲",
+                      "children": []
+                    },
+                    {
+                      "label": "乙",
+                      "children": [
+                        {
+                          "label": "γ",
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              "status": "success",
+              "output": {
+                "labels": [
+                  "根",
+                  "甲",
+                  "乙",
+                  "γ"
+                ],
+                "node_count": 4,
+                "max_depth": 3
+              }
+            }
+          },
+          "search_generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "search_schema_valid": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "search_response": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "search_succeeded": true,
+              "response_json_valid": true,
+              "unique_candidates": true,
+              "target_recalled": true,
+              "schemas_match_registry": true
+            },
+            "recall_at_k": 1.0,
+            "precision_at_k": 0.2,
+            "reciprocal_rank": 1.0
+          },
+          "generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "envelope_valid": true,
+              "tool_name_correct": true,
+              "tool_registered": true,
+              "tool_schema_valid": true,
+              "arguments_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "repaired_generation": null,
+          "execution": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "execution_succeeded": true,
+              "dispatch_correct": true,
+              "executed_arguments_correct": true,
+              "output_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "first_pass": true,
+          "effective_pass": true
+        }
+      ],
+      "telemetry": {
+        "duration_ms": 1509.35,
+        "input_tokens": 1281,
+        "output_tokens": 169,
+        "cache_read_tokens": 256,
+        "model_calls": 2,
+        "top_level_tools_hashes": [
+          "b3c0b53e25060937ab0fc99d5dda0d3e630036cf4f79bc2592b042ee1bc899b0",
+          "972cb08d182a3fe9252e72241d4aaa9f352c7e61eece4bb06757782be3ab1a6c"
+        ]
+      }
+    },
+    {
+      "run_id": "template-special-values-r0",
+      "case_id": "template-special-values",
+      "input": "Render the template `Hello, {name}. Ticket {ticket} is {status}.` with name `A \\\"quoted\\\" user`, ticket `T-007`, and status `处理中`.",
+      "scenario": "escaping_nested",
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "repetition": 0,
+      "target_tool": "render_message_template",
+      "relevant_tools": [
+        "render_message_template"
+      ],
+      "expected_arguments": {
+        "template": "Hello, {name}. Ticket {ticket} is {status}.",
+        "values": {
+          "name": "A \\\"quoted\\\" user",
+          "ticket": "T-007",
+          "status": "处理中"
+        }
+      },
+      "expected_output": {
+        "rendered": "Hello, A \\\"quoted\\\" user. Ticket T-007 is 处理中.",
+        "characters": 46
+      },
+      "captured_attempts": 1,
+      "outcome": "completed",
+      "status": "failed",
+      "attempts": [
+        {
+          "index": 1,
+          "evidence": {
+            "search_call": {
+              "call_id": "search:call_00_6WCWOmRTXf7ZNXiLR2DB2192",
+              "name": "search_tools",
+              "arguments": "{\"query\": \"render template with variables substitution\"}",
+              "complete": true
+            },
+            "search_result": {
+              "call_id": "search:call_00_6WCWOmRTXf7ZNXiLR2DB2192",
+              "status": "success",
+              "raw_output": "{\"tools\":[{\"name\":\"render_message_template\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"template\":{\"type\":\"string\"},\"values\":{\"type\":\"object\",\"additionalProperties\":{\"type\":\"string\"}}},\"required\":[\"template\",\"values\"],\"additionalProperties\":false}},{\"name\":\"validate_message_template\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"template\":{\"type\":\"string\"},\"values\":{\"type\":\"object\",\"additionalProperties\":{\"type\":\"string\"}}},\"required\":[\"template\",\"values\"],\"additionalProperties\":false}},{\"name\":\"render_label_tree\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"tree\":{\"$ref\":\"#/$defs/node\"}},\"required\":[\"tree\"],\"additionalProperties\":false,\"$defs\":{\"node\":{\"type\":\"object\",\"properties\":{\"label\":{\"type\":\"string\"},\"children\":{\"type\":\"array\",\"items\":{\"$ref\":\"#/$defs/node\"}}},\"required\":[\"label\",\"children\"],\"additionalProperties\":false}}}},{\"name\":\"store_text_blob\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"labels\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"text\",\"labels\"],\"additionalProperties\":false}}]}"
+            },
+            "call": {
+              "call_id": "execute:call_00_g17daoL95KTPCNBo5S164466",
+              "name": "execute_tool",
+              "arguments": "{\"tool_name\": \"render_message_template\", \"arguments\": {\"template\": \"Hello, {name}. Ticket {ticket} is {status}.\", \"values\": {\"name\": \"A \\\"quoted\\\" user\", \"ticket\": \"T-007\", \"status\": \"处理中\"}}}",
+              "complete": true
+            },
+            "repaired_arguments": null,
+            "execution": {
+              "call_id": "execute:call_00_g17daoL95KTPCNBo5S164466",
+              "tool_name": "render_message_template",
+              "arguments": {
+                "template": "Hello, {name}. Ticket {ticket} is {status}.",
+                "values": {
+                  "name": "A \"quoted\" user",
+                  "ticket": "T-007",
+                  "status": "处理中"
+                }
+              },
+              "status": "success",
+              "output": {
+                "rendered": "Hello, A \"quoted\" user. Ticket T-007 is 处理中.",
+                "characters": 44
+              }
+            }
+          },
+          "search_generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "search_schema_valid": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "search_response": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "search_succeeded": true,
+              "response_json_valid": true,
+              "unique_candidates": true,
+              "target_recalled": true,
+              "schemas_match_registry": true
+            },
+            "recall_at_k": 1.0,
+            "precision_at_k": 0.25,
+            "reciprocal_rank": 1.0
+          },
+          "generation": {
+            "status": "failed",
+            "failures": [
+              "arguments_correct"
+            ],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "envelope_valid": true,
+              "tool_name_correct": true,
+              "tool_registered": true,
+              "tool_schema_valid": true,
+              "arguments_correct": false
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "repaired_generation": null,
+          "execution": {
+            "status": "failed",
+            "failures": [
+              "executed_arguments_correct",
+              "output_correct"
+            ],
+            "checks": {
+              "execution_succeeded": true,
+              "dispatch_correct": true,
+              "executed_arguments_correct": false,
+              "output_correct": false
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "first_pass": false,
+          "effective_pass": false
+        }
+      ],
+      "telemetry": {
+        "duration_ms": 1483.01,
+        "input_tokens": 1039,
+        "output_tokens": 147,
+        "cache_read_tokens": 256,
+        "model_calls": 2,
+        "top_level_tools_hashes": [
+          "b3c0b53e25060937ab0fc99d5dda0d3e630036cf4f79bc2592b042ee1bc899b0",
+          "972cb08d182a3fe9252e72241d4aaa9f352c7e61eece4bb06757782be3ab1a6c"
+        ]
+      }
+    },
+    {
+      "run_id": "manifest-unicode-bytes-r0",
+      "case_id": "manifest-unicode-bytes",
+      "input": "Build a file manifest for two files in this order: path notes.txt with content `hello\\nworld` as a real newline, then path 数据.json with content `{\"ok\":true}`. Return byte counts and SHA-256 hashes.",
+      "scenario": "nested_arrays",
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "repetition": 0,
+      "target_tool": "build_file_manifest",
+      "relevant_tools": [
+        "build_file_manifest"
+      ],
+      "expected_arguments": {
+        "files": [
+          {
+            "path": "notes.txt",
+            "content": "hello\nworld"
+          },
+          {
+            "path": "数据.json",
+            "content": "{\"ok\":true}"
+          }
+        ]
+      },
+      "expected_output": {
+        "files": [
+          {
+            "path": "notes.txt",
+            "bytes": 11,
+            "sha256": "26c60a61d01db5836ca70fefd44a6a016620413c8ef5f259a6c5612d4f79d3b8"
+          },
+          {
+            "path": "数据.json",
+            "bytes": 11,
+            "sha256": "4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93"
+          }
+        ],
+        "total_bytes": 22
+      },
+      "captured_attempts": 1,
+      "outcome": "completed",
+      "status": "passed",
+      "attempts": [
+        {
+          "index": 1,
+          "evidence": {
+            "search_call": {
+              "call_id": "search:call_00_fcloCvK7VTGASLExyRMh3363",
+              "name": "search_tools",
+              "arguments": "{\"query\": \"build file manifest with byte counts and SHA-256 hashes\"}",
+              "complete": true
+            },
+            "search_result": {
+              "call_id": "search:call_00_fcloCvK7VTGASLExyRMh3363",
+              "status": "success",
+              "raw_output": "{\"tools\":[{\"name\":\"build_file_manifest\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"files\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"},\"content\":{\"type\":\"string\"}},\"required\":[\"path\",\"content\"],\"additionalProperties\":false},\"minItems\":1}},\"required\":[\"files\"],\"additionalProperties\":false}},{\"name\":\"verify_file_manifest\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"files\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"},\"content\":{\"type\":\"string\"}},\"required\":[\"path\",\"content\"],\"additionalProperties\":false},\"minItems\":1}},\"required\":[\"files\"],\"additionalProperties\":false}},{\"name\":\"store_text_blob\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"labels\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"text\",\"labels\"],\"additionalProperties\":false}},{\"name\":\"count_text_blob\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"labels\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"text\",\"labels\"],\"additionalProperties\":false}},{\"name\":\"filter_inventory_items\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"sku\":{\"type\":\"string\"},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"price_cents\":{\"type\":\"integer\",\"minimum\":0}},\"required\":[\"sku\",\"stock\",\"price_cents\"],\"additionalProperties\":false}},\"min_stock\":{\"type\":\"integer\",\"minimum\":0},\"max_price_cents\":{\"type\":[\"integer\",\"null\"],\"minimum\":0}},\"required\":[\"items\",\"min_stock\",\"max_price_cents\"],\"additionalProperties\":false}}]}"
+            },
+            "call": {
+              "call_id": "execute:call_00_nPyo0kmp1yMh2hkNtDxs4816",
+              "name": "execute_tool",
+              "arguments": "{\"tool_name\": \"build_file_manifest\", \"arguments\": {\"files\": [{\"path\": \"notes.txt\", \"content\": \"hello\\nworld\"}, {\"path\": \"数据.json\", \"content\": \"{\\\"ok\\\":true}\"}]}}",
+              "complete": true
+            },
+            "repaired_arguments": null,
+            "execution": {
+              "call_id": "execute:call_00_nPyo0kmp1yMh2hkNtDxs4816",
+              "tool_name": "build_file_manifest",
+              "arguments": {
+                "files": [
+                  {
+                    "path": "notes.txt",
+                    "content": "hello\nworld"
+                  },
+                  {
+                    "path": "数据.json",
+                    "content": "{\"ok\":true}"
+                  }
+                ]
+              },
+              "status": "success",
+              "output": {
+                "files": [
+                  {
+                    "path": "notes.txt",
+                    "bytes": 11,
+                    "sha256": "26c60a61d01db5836ca70fefd44a6a016620413c8ef5f259a6c5612d4f79d3b8"
+                  },
+                  {
+                    "path": "数据.json",
+                    "bytes": 11,
+                    "sha256": "4062edaf750fb8074e7e83e0c9028c94e32468a8b6f1614774328ef045150f93"
+                  }
+                ],
+                "total_bytes": 22
+              }
+            }
+          },
+          "search_generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "search_schema_valid": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "search_response": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "search_succeeded": true,
+              "response_json_valid": true,
+              "unique_candidates": true,
+              "target_recalled": true,
+              "schemas_match_registry": true
+            },
+            "recall_at_k": 1.0,
+            "precision_at_k": 0.2,
+            "reciprocal_rank": 1.0
+          },
+          "generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "envelope_valid": true,
+              "tool_name_correct": true,
+              "tool_registered": true,
+              "tool_schema_valid": true,
+              "arguments_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "repaired_generation": null,
+          "execution": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "execution_succeeded": true,
+              "dispatch_correct": true,
+              "executed_arguments_correct": true,
+              "output_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "first_pass": true,
+          "effective_pass": true
+        }
+      ],
+      "telemetry": {
+        "duration_ms": 1566.87,
+        "input_tokens": 1209,
+        "output_tokens": 164,
+        "cache_read_tokens": 256,
+        "model_calls": 2,
+        "top_level_tools_hashes": [
+          "b3c0b53e25060937ab0fc99d5dda0d3e630036cf4f79bc2592b042ee1bc899b0",
+          "972cb08d182a3fe9252e72241d4aaa9f352c7e61eece4bb06757782be3ab1a6c"
+        ]
+      }
+    },
+    {
+      "run_id": "inventory-price-and-stock-r0",
+      "case_id": "inventory-price-and-stock",
+      "input": "Filter these items, preserving order, to stock at least 2 and price at most 1500 cents: A(stock 4, price 1200), B(stock 1, price 900), C(stock 3, price 1700), D(stock 2, price 1500).",
+      "scenario": "nested_arrays_null",
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "repetition": 0,
+      "target_tool": "filter_inventory_items",
+      "relevant_tools": [
+        "filter_inventory_items"
+      ],
+      "expected_arguments": {
+        "items": [
+          {
+            "sku": "A",
+            "stock": 4,
+            "price_cents": 1200
+          },
+          {
+            "sku": "B",
+            "stock": 1,
+            "price_cents": 900
+          },
+          {
+            "sku": "C",
+            "stock": 3,
+            "price_cents": 1700
+          },
+          {
+            "sku": "D",
+            "stock": 2,
+            "price_cents": 1500
+          }
+        ],
+        "min_stock": 2,
+        "max_price_cents": 1500
+      },
+      "expected_output": {
+        "selected_skus": [
+          "A",
+          "D"
+        ],
+        "total_stock": 6
+      },
+      "captured_attempts": 1,
+      "outcome": "completed",
+      "status": "passed",
+      "attempts": [
+        {
+          "index": 1,
+          "evidence": {
+            "search_call": {
+              "call_id": "search:call_00_p4VlgT9WTUlNAi6nn2Hr7400",
+              "name": "search_tools",
+              "arguments": "{\"query\": \"filter list of items by numeric conditions preserving order\"}",
+              "complete": true
+            },
+            "search_result": {
+              "call_id": "search:call_00_p4VlgT9WTUlNAi6nn2Hr7400",
+              "status": "success",
+              "raw_output": "{\"tools\":[{\"name\":\"filter_inventory_items\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"sku\":{\"type\":\"string\"},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"price_cents\":{\"type\":\"integer\",\"minimum\":0}},\"required\":[\"sku\",\"stock\",\"price_cents\"],\"additionalProperties\":false}},\"min_stock\":{\"type\":\"integer\",\"minimum\":0},\"max_price_cents\":{\"type\":[\"integer\",\"null\"],\"minimum\":0}},\"required\":[\"items\",\"min_stock\",\"max_price_cents\"],\"additionalProperties\":false}},{\"name\":\"summarize_inventory_items\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"sku\":{\"type\":\"string\"},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"price_cents\":{\"type\":\"integer\",\"minimum\":0}},\"required\":[\"sku\",\"stock\",\"price_cents\"],\"additionalProperties\":false}},\"min_stock\":{\"type\":\"integer\",\"minimum\":0},\"max_price_cents\":{\"type\":[\"integer\",\"null\"],\"minimum\":0}},\"required\":[\"items\",\"min_stock\",\"max_price_cents\"],\"additionalProperties\":false}},{\"name\":\"average_integer_batch\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"values\":{\"type\":\"array\",\"items\":{\"type\":\"integer\"},\"minItems\":1},\"include_extrema\":{\"type\":\"boolean\"}},\"required\":[\"values\",\"include_extrema\"],\"additionalProperties\":false}},{\"name\":\"sum_integer_batch\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"values\":{\"type\":\"array\",\"items\":{\"type\":\"integer\"},\"minItems\":1},\"include_extrema\":{\"type\":\"boolean\"}},\"required\":[\"values\",\"include_extrema\"],\"additionalProperties\":false}}]}"
+            },
+            "call": {
+              "call_id": "execute:call_00_jcso7WAuMHoJIEff7tiD8922",
+              "name": "execute_tool",
+              "arguments": "{\"tool_name\": \"filter_inventory_items\", \"arguments\": {\"items\": [{\"sku\": \"A\", \"stock\": 4, \"price_cents\": 1200}, {\"sku\": \"B\", \"stock\": 1, \"price_cents\": 900}, {\"sku\": \"C\", \"stock\": 3, \"price_cents\": 1700}, {\"sku\": \"D\", \"stock\": 2, \"price_cents\": 1500}], \"min_stock\": 2, \"max_price_cents\": 1500}}",
+              "complete": true
+            },
+            "repaired_arguments": null,
+            "execution": {
+              "call_id": "execute:call_00_jcso7WAuMHoJIEff7tiD8922",
+              "tool_name": "filter_inventory_items",
+              "arguments": {
+                "items": [
+                  {
+                    "sku": "A",
+                    "stock": 4,
+                    "price_cents": 1200
+                  },
+                  {
+                    "sku": "B",
+                    "stock": 1,
+                    "price_cents": 900
+                  },
+                  {
+                    "sku": "C",
+                    "stock": 3,
+                    "price_cents": 1700
+                  },
+                  {
+                    "sku": "D",
+                    "stock": 2,
+                    "price_cents": 1500
+                  }
+                ],
+                "min_stock": 2,
+                "max_price_cents": 1500
+              },
+              "status": "success",
+              "output": {
+                "selected_skus": [
+                  "A",
+                  "D"
+                ],
+                "total_stock": 6
+              }
+            }
+          },
+          "search_generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "search_schema_valid": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "search_response": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "search_succeeded": true,
+              "response_json_valid": true,
+              "unique_candidates": true,
+              "target_recalled": true,
+              "schemas_match_registry": true
+            },
+            "recall_at_k": 1.0,
+            "precision_at_k": 0.25,
+            "reciprocal_rank": 1.0
+          },
+          "generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "envelope_valid": true,
+              "tool_name_correct": true,
+              "tool_registered": true,
+              "tool_schema_valid": true,
+              "arguments_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "repaired_generation": null,
+          "execution": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "execution_succeeded": true,
+              "dispatch_correct": true,
+              "executed_arguments_correct": true,
+              "output_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "first_pass": true,
+          "effective_pass": true
+        }
+      ],
+      "telemetry": {
+        "duration_ms": 1336.08,
+        "input_tokens": 1234,
+        "output_tokens": 208,
+        "cache_read_tokens": 256,
+        "model_calls": 2,
+        "top_level_tools_hashes": [
+          "b3c0b53e25060937ab0fc99d5dda0d3e630036cf4f79bc2592b042ee1bc899b0",
+          "972cb08d182a3fe9252e72241d4aaa9f352c7e61eece4bb06757782be3ab1a6c"
+        ]
+      }
+    },
+    {
+      "run_id": "inventory-null-price-r0",
+      "case_id": "inventory-null-price",
+      "input": "Select inventory items with stock at least 1 and no maximum price: X(stock 0, price 5), Y(stock 1, price 9999), Z(stock 5, price 25).",
+      "scenario": "nested_arrays_null",
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "repetition": 0,
+      "target_tool": "filter_inventory_items",
+      "relevant_tools": [
+        "filter_inventory_items"
+      ],
+      "expected_arguments": {
+        "items": [
+          {
+            "sku": "X",
+            "stock": 0,
+            "price_cents": 5
+          },
+          {
+            "sku": "Y",
+            "stock": 1,
+            "price_cents": 9999
+          },
+          {
+            "sku": "Z",
+            "stock": 5,
+            "price_cents": 25
+          }
+        ],
+        "min_stock": 1,
+        "max_price_cents": null
+      },
+      "expected_output": {
+        "selected_skus": [
+          "Y",
+          "Z"
+        ],
+        "total_stock": 6
+      },
+      "captured_attempts": 1,
+      "outcome": "completed",
+      "status": "passed",
+      "attempts": [
+        {
+          "index": 1,
+          "evidence": {
+            "search_call": {
+              "call_id": "search:call_00_Hw0NepmZJf0C80Zdq1Q70258",
+              "name": "search_tools",
+              "arguments": "{\"query\": \"filter inventory items by stock and price criteria\"}",
+              "complete": true
+            },
+            "search_result": {
+              "call_id": "search:call_00_Hw0NepmZJf0C80Zdq1Q70258",
+              "status": "success",
+              "raw_output": "{\"tools\":[{\"name\":\"filter_inventory_items\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"sku\":{\"type\":\"string\"},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"price_cents\":{\"type\":\"integer\",\"minimum\":0}},\"required\":[\"sku\",\"stock\",\"price_cents\"],\"additionalProperties\":false}},\"min_stock\":{\"type\":\"integer\",\"minimum\":0},\"max_price_cents\":{\"type\":[\"integer\",\"null\"],\"minimum\":0}},\"required\":[\"items\",\"min_stock\",\"max_price_cents\"],\"additionalProperties\":false}},{\"name\":\"summarize_inventory_items\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"sku\":{\"type\":\"string\"},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"price_cents\":{\"type\":\"integer\",\"minimum\":0}},\"required\":[\"sku\",\"stock\",\"price_cents\"],\"additionalProperties\":false}},\"min_stock\":{\"type\":\"integer\",\"minimum\":0},\"max_price_cents\":{\"type\":[\"integer\",\"null\"],\"minimum\":0}},\"required\":[\"items\",\"min_stock\",\"max_price_cents\"],\"additionalProperties\":false}},{\"name\":\"build_file_manifest\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"files\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"},\"content\":{\"type\":\"string\"}},\"required\":[\"path\",\"content\"],\"additionalProperties\":false},\"minItems\":1}},\"required\":[\"files\"],\"additionalProperties\":false}},{\"name\":\"count_text_blob\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\"},\"labels\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"required\":[\"text\",\"labels\"],\"additionalProperties\":false}},{\"name\":\"flatten_label_tree\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"tree\":{\"$ref\":\"#/$defs/node\"}},\"required\":[\"tree\"],\"additionalProperties\":false,\"$defs\":{\"node\":{\"type\":\"object\",\"properties\":{\"label\":{\"type\":\"string\"},\"children\":{\"type\":\"array\",\"items\":{\"$ref\":\"#/$defs/node\"}}},\"required\":[\"label\",\"children\"],\"additionalProperties\":false}}}}]}"
+            },
+            "call": {
+              "call_id": "execute:call_00_x2wsT7ZXCU78WAAofYpc6722",
+              "name": "execute_tool",
+              "arguments": "{\"tool_name\": \"filter_inventory_items\", \"arguments\": {\"items\": [{\"sku\": \"X\", \"stock\": 0, \"price_cents\": 5}, {\"sku\": \"Y\", \"stock\": 1, \"price_cents\": 9999}, {\"sku\": \"Z\", \"stock\": 5, \"price_cents\": 25}], \"min_stock\": 1, \"max_price_cents\": null}}",
+              "complete": true
+            },
+            "repaired_arguments": null,
+            "execution": {
+              "call_id": "execute:call_00_x2wsT7ZXCU78WAAofYpc6722",
+              "tool_name": "filter_inventory_items",
+              "arguments": {
+                "items": [
+                  {
+                    "sku": "X",
+                    "stock": 0,
+                    "price_cents": 5
+                  },
+                  {
+                    "sku": "Y",
+                    "stock": 1,
+                    "price_cents": 9999
+                  },
+                  {
+                    "sku": "Z",
+                    "stock": 5,
+                    "price_cents": 25
+                  }
+                ],
+                "min_stock": 1,
+                "max_price_cents": null
+              },
+              "status": "success",
+              "output": {
+                "selected_skus": [
+                  "Y",
+                  "Z"
+                ],
+                "total_stock": 6
+              }
+            }
+          },
+          "search_generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "search_schema_valid": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "search_response": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "search_succeeded": true,
+              "response_json_valid": true,
+              "unique_candidates": true,
+              "target_recalled": true,
+              "schemas_match_registry": true
+            },
+            "recall_at_k": 1.0,
+            "precision_at_k": 0.2,
+            "reciprocal_rank": 1.0
+          },
+          "generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "envelope_valid": true,
+              "tool_name_correct": true,
+              "tool_registered": true,
+              "tool_schema_valid": true,
+              "arguments_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "repaired_generation": null,
+          "execution": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "execution_succeeded": true,
+              "dispatch_correct": true,
+              "executed_arguments_correct": true,
+              "output_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "first_pass": true,
+          "effective_pass": true
+        }
+      ],
+      "telemetry": {
+        "duration_ms": 1643.39,
+        "input_tokens": 1290,
+        "output_tokens": 183,
+        "cache_read_tokens": 256,
+        "model_calls": 2,
+        "top_level_tools_hashes": [
+          "b3c0b53e25060937ab0fc99d5dda0d3e630036cf4f79bc2592b042ee1bc899b0",
+          "972cb08d182a3fe9252e72241d4aaa9f352c7e61eece4bb06757782be3ab1a6c"
+        ]
+      }
+    },
+    {
+      "run_id": "settings-shallow-override-r0",
+      "case_id": "settings-shallow-override",
+      "input": "Apply shallow overrides to runtime settings. Base is {\"region\":\"cn\",\"retries\":3,\"debug\":false,\"note\":null}; overrides are {\"retries\":0,\"debug\":true,\"mode\":\"safe\"}.",
+      "scenario": "objects_types",
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "repetition": 0,
+      "target_tool": "merge_runtime_settings",
+      "relevant_tools": [
+        "merge_runtime_settings"
+      ],
+      "expected_arguments": {
+        "base": {
+          "region": "cn",
+          "retries": 3,
+          "debug": false,
+          "note": null
+        },
+        "overrides": {
+          "retries": 0,
+          "debug": true,
+          "mode": "safe"
+        }
+      },
+      "expected_output": {
+        "region": "cn",
+        "retries": 0,
+        "debug": true,
+        "note": null,
+        "mode": "safe"
+      },
+      "captured_attempts": 1,
+      "outcome": "completed",
+      "status": "passed",
+      "attempts": [
+        {
+          "index": 1,
+          "evidence": {
+            "search_call": {
+              "call_id": "search:call_00_wTkmySWVDUmrwPrnaNfu1851",
+              "name": "search_tools",
+              "arguments": "{\"query\": \"apply shallow overrides to JSON object merge settings\"}",
+              "complete": true
+            },
+            "search_result": {
+              "call_id": "search:call_00_wTkmySWVDUmrwPrnaNfu1851",
+              "status": "success",
+              "raw_output": "{\"tools\":[{\"name\":\"merge_runtime_settings\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"base\":{\"type\":\"object\",\"additionalProperties\":{\"type\":[\"string\",\"number\",\"integer\",\"boolean\",\"null\"]}},\"overrides\":{\"type\":\"object\",\"additionalProperties\":{\"type\":[\"string\",\"number\",\"integer\",\"boolean\",\"null\"]}}},\"required\":[\"base\",\"overrides\"],\"additionalProperties\":false}},{\"name\":\"validate_runtime_settings\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"base\":{\"type\":\"object\",\"additionalProperties\":{\"type\":[\"string\",\"number\",\"integer\",\"boolean\",\"null\"]}},\"overrides\":{\"type\":\"object\",\"additionalProperties\":{\"type\":[\"string\",\"number\",\"integer\",\"boolean\",\"null\"]}}},\"required\":[\"base\",\"overrides\"],\"additionalProperties\":false}}]}"
+            },
+            "call": {
+              "call_id": "execute:call_00_O0QEY5XttycfWHO3fE7q1884",
+              "name": "execute_tool",
+              "arguments": "{\"tool_name\": \"merge_runtime_settings\", \"arguments\": {\"base\": {\"region\": \"cn\", \"retries\": 3, \"debug\": false, \"note\": null}, \"overrides\": {\"retries\": 0, \"debug\": true, \"mode\": \"safe\"}}}",
+              "complete": true
+            },
+            "repaired_arguments": null,
+            "execution": {
+              "call_id": "execute:call_00_O0QEY5XttycfWHO3fE7q1884",
+              "tool_name": "merge_runtime_settings",
+              "arguments": {
+                "base": {
+                  "region": "cn",
+                  "retries": 3,
+                  "debug": false,
+                  "note": null
+                },
+                "overrides": {
+                  "retries": 0,
+                  "debug": true,
+                  "mode": "safe"
+                }
+              },
+              "status": "success",
+              "output": {
+                "region": "cn",
+                "retries": 0,
+                "debug": true,
+                "note": null,
+                "mode": "safe"
+              }
+            }
+          },
+          "search_generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "search_schema_valid": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "search_response": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "search_succeeded": true,
+              "response_json_valid": true,
+              "unique_candidates": true,
+              "target_recalled": true,
+              "schemas_match_registry": true
+            },
+            "recall_at_k": 1.0,
+            "precision_at_k": 0.5,
+            "reciprocal_rank": 1.0
+          },
+          "generation": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "call_present": true,
+              "generation_complete": true,
+              "json_valid": true,
+              "entrypoint_correct": true,
+              "envelope_valid": true,
+              "tool_name_correct": true,
+              "tool_registered": true,
+              "tool_schema_valid": true,
+              "arguments_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "repaired_generation": null,
+          "execution": {
+            "status": "passed",
+            "failures": [],
+            "checks": {
+              "execution_succeeded": true,
+              "dispatch_correct": true,
+              "executed_arguments_correct": true,
+              "output_correct": true
+            },
+            "recall_at_k": null,
+            "precision_at_k": null,
+            "reciprocal_rank": null
+          },
+          "first_pass": true,
+          "effective_pass": true
+        }
+      ],
+      "telemetry": {
+        "duration_ms": 1513.97,
+        "input_tokens": 966,
+        "output_tokens": 151,
+        "cache_read_tokens": 256,
+        "model_calls": 2,
+        "top_level_tools_hashes": [
+          "b3c0b53e25060937ab0fc99d5dda0d3e630036cf4f79bc2592b042ee1bc899b0",
+          "972cb08d182a3fe9252e72241d4aaa9f352c7e61eece4bb06757782be3ab1a6c"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "configuration": null,
+    "scenario": null,
+    "runs": 12,
+    "errors": 0,
+    "metrics": {
+      "first_json_valid": {
+        "passed": 12,
+        "failed": 0,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 1.0,
+        "reached_rate": 1.0
+      },
+      "first_tool_schema_valid": {
+        "passed": 12,
+        "failed": 0,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 1.0,
+        "reached_rate": 1.0
+      },
+      "first_arguments_correct": {
+        "passed": 11,
+        "failed": 1,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 0.9166666666666666,
+        "reached_rate": 0.9166666666666666
+      },
+      "first_generation_success": {
+        "passed": 11,
+        "failed": 1,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 0.9166666666666666,
+        "reached_rate": 0.9166666666666666
+      },
+      "first_envelope_valid": {
+        "passed": 12,
+        "failed": 0,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 1.0,
+        "reached_rate": 1.0
+      },
+      "first_tool_name_correct": {
+        "passed": 12,
+        "failed": 0,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 1.0,
+        "reached_rate": 1.0
+      },
+      "first_attempt_success": {
+        "passed": 11,
+        "failed": 1,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 0.9166666666666666,
+        "reached_rate": 0.9166666666666666
+      },
+      "eventual_success": {
+        "passed": 11,
+        "failed": 1,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 0.9166666666666666,
+        "reached_rate": 0.9166666666666666
+      },
+      "repair_used": {
+        "passed": 0,
+        "failed": 12,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 0.0,
+        "reached_rate": 0.0
+      },
+      "repair_recovery": {
+        "passed": 0,
+        "failed": 0,
+        "not_reached": 0,
+        "not_applicable": 12,
+        "eligible": 0,
+        "rate": null,
+        "reached_rate": null
+      },
+      "retry_used": {
+        "passed": 0,
+        "failed": 12,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 0.0,
+        "reached_rate": 0.0
+      },
+      "retry_recovery": {
+        "passed": 0,
+        "failed": 0,
+        "not_reached": 0,
+        "not_applicable": 12,
+        "eligible": 0,
+        "rate": null,
+        "reached_rate": null
+      },
+      "search_recall_at_k": {
+        "passed": 12,
+        "failed": 0,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 1.0,
+        "reached_rate": 1.0
+      }
+    },
+    "checkpoints": {
+      "search_generation": {
+        "passed": 12,
+        "failed": 0,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 1.0,
+        "reached_rate": 1.0
+      },
+      "search_response": {
+        "passed": 12,
+        "failed": 0,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 1.0,
+        "reached_rate": 1.0
+      },
+      "generation": {
+        "passed": 11,
+        "failed": 1,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 0.9166666666666666,
+        "reached_rate": 0.9166666666666666
+      },
+      "execution": {
+        "passed": 11,
+        "failed": 1,
+        "not_reached": 0,
+        "not_applicable": 0,
+        "eligible": 12,
+        "rate": 0.9166666666666666,
+        "reached_rate": 0.9166666666666666
+      }
+    },
+    "search_quality": {
+      "samples": 12,
+      "mean_recall_at_k": 1.0,
+      "mean_precision_at_k": 0.26944444444444443,
+      "mean_reciprocal_rank": 1.0
+    },
+    "telemetry": {
+      "latency_samples": 12,
+      "mean_duration_ms": 1534.7808333333332,
+      "observed_search_calls": 12,
+      "observed_tool_calls": 12,
+      "input_tokens_samples": 12,
+      "total_input_tokens": 13649,
+      "output_tokens_samples": 12,
+      "total_output_tokens": 1838,
+      "cache_read_tokens_samples": 12,
+      "total_cache_read_tokens": 2048,
+      "model_calls_samples": 12,
+      "total_model_calls": 24
+    }
+  },
+  "groups": [
+    {
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "scenario": null,
+      "runs": 12,
+      "errors": 0,
+      "metrics": {
+        "first_json_valid": {
+          "passed": 12,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_schema_valid": {
+          "passed": 12,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_arguments_correct": {
+          "passed": 11,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 0.9166666666666666,
+          "reached_rate": 0.9166666666666666
+        },
+        "first_generation_success": {
+          "passed": 11,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 0.9166666666666666,
+          "reached_rate": 0.9166666666666666
+        },
+        "first_envelope_valid": {
+          "passed": 12,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_name_correct": {
+          "passed": 12,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_attempt_success": {
+          "passed": 11,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 0.9166666666666666,
+          "reached_rate": 0.9166666666666666
+        },
+        "eventual_success": {
+          "passed": 11,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 0.9166666666666666,
+          "reached_rate": 0.9166666666666666
+        },
+        "repair_used": {
+          "passed": 0,
+          "failed": 12,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "repair_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 12,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "retry_used": {
+          "passed": 0,
+          "failed": 12,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "retry_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 12,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "search_recall_at_k": {
+          "passed": 12,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "checkpoints": {
+        "search_generation": {
+          "passed": 12,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "search_response": {
+          "passed": 12,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "generation": {
+          "passed": 11,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 0.9166666666666666,
+          "reached_rate": 0.9166666666666666
+        },
+        "execution": {
+          "passed": 11,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 12,
+          "rate": 0.9166666666666666,
+          "reached_rate": 0.9166666666666666
+        }
+      },
+      "search_quality": {
+        "samples": 12,
+        "mean_recall_at_k": 1.0,
+        "mean_precision_at_k": 0.26944444444444443,
+        "mean_reciprocal_rank": 1.0
+      },
+      "telemetry": {
+        "latency_samples": 12,
+        "mean_duration_ms": 1534.7808333333332,
+        "observed_search_calls": 12,
+        "observed_tool_calls": 12,
+        "input_tokens_samples": 12,
+        "total_input_tokens": 13649,
+        "output_tokens_samples": 12,
+        "total_output_tokens": 1838,
+        "cache_read_tokens_samples": 12,
+        "total_cache_read_tokens": 2048,
+        "model_calls_samples": 12,
+        "total_model_calls": 24
+      }
+    },
+    {
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "scenario": "escaping_unicode",
+      "runs": 1,
+      "errors": 0,
+      "metrics": {
+        "first_json_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_schema_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_arguments_correct": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_generation_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_envelope_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_name_correct": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_attempt_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "eventual_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "repair_used": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "repair_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 1,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "retry_used": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "retry_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 1,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "search_recall_at_k": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "checkpoints": {
+        "search_generation": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "search_response": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "generation": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "execution": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "search_quality": {
+        "samples": 1,
+        "mean_recall_at_k": 1.0,
+        "mean_precision_at_k": 0.2,
+        "mean_reciprocal_rank": 1.0
+      },
+      "telemetry": {
+        "latency_samples": 1,
+        "mean_duration_ms": 1810.77,
+        "observed_search_calls": 1,
+        "observed_tool_calls": 1,
+        "input_tokens_samples": 1,
+        "total_input_tokens": 1208,
+        "output_tokens_samples": 1,
+        "total_output_tokens": 139,
+        "cache_read_tokens_samples": 1,
+        "total_cache_read_tokens": 0,
+        "model_calls_samples": 1,
+        "total_model_calls": 2
+      }
+    },
+    {
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "scenario": "json_as_text",
+      "runs": 1,
+      "errors": 0,
+      "metrics": {
+        "first_json_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_schema_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_arguments_correct": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_generation_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_envelope_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_name_correct": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_attempt_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "eventual_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "repair_used": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "repair_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 1,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "retry_used": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "retry_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 1,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "search_recall_at_k": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "checkpoints": {
+        "search_generation": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "search_response": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "generation": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "execution": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "search_quality": {
+        "samples": 1,
+        "mean_recall_at_k": 1.0,
+        "mean_precision_at_k": 0.2,
+        "mean_reciprocal_rank": 1.0
+      },
+      "telemetry": {
+        "latency_samples": 1,
+        "mean_duration_ms": 1721.12,
+        "observed_search_calls": 1,
+        "observed_tool_calls": 1,
+        "input_tokens_samples": 1,
+        "total_input_tokens": 1131,
+        "output_tokens_samples": 1,
+        "total_output_tokens": 136,
+        "cache_read_tokens_samples": 1,
+        "total_cache_read_tokens": 0,
+        "model_calls_samples": 1,
+        "total_model_calls": 2
+      }
+    },
+    {
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "scenario": "arrays_numbers",
+      "runs": 2,
+      "errors": 0,
+      "metrics": {
+        "first_json_valid": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_schema_valid": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_arguments_correct": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_generation_success": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_envelope_valid": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_name_correct": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_attempt_success": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "eventual_success": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "repair_used": {
+          "passed": 0,
+          "failed": 2,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "repair_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 2,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "retry_used": {
+          "passed": 0,
+          "failed": 2,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "retry_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 2,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "search_recall_at_k": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "checkpoints": {
+        "search_generation": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "search_response": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "generation": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "execution": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "search_quality": {
+        "samples": 2,
+        "mean_recall_at_k": 1.0,
+        "mean_precision_at_k": 0.2,
+        "mean_reciprocal_rank": 1.0
+      },
+      "telemetry": {
+        "latency_samples": 2,
+        "mean_duration_ms": 1530.25,
+        "observed_search_calls": 2,
+        "observed_tool_calls": 2,
+        "input_tokens_samples": 2,
+        "total_input_tokens": 2299,
+        "output_tokens_samples": 2,
+        "total_output_tokens": 256,
+        "cache_read_tokens_samples": 2,
+        "total_cache_read_tokens": 0,
+        "model_calls_samples": 2,
+        "total_model_calls": 4
+      }
+    },
+    {
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "scenario": "nested_null",
+      "runs": 1,
+      "errors": 0,
+      "metrics": {
+        "first_json_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_schema_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_arguments_correct": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_generation_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_envelope_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_name_correct": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_attempt_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "eventual_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "repair_used": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "repair_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 1,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "retry_used": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "retry_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 1,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "search_recall_at_k": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "checkpoints": {
+        "search_generation": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "search_response": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "generation": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "execution": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "search_quality": {
+        "samples": 1,
+        "mean_recall_at_k": 1.0,
+        "mean_precision_at_k": 0.3333333333333333,
+        "mean_reciprocal_rank": 1.0
+      },
+      "telemetry": {
+        "latency_samples": 1,
+        "mean_duration_ms": 1301.69,
+        "observed_search_calls": 1,
+        "observed_tool_calls": 1,
+        "input_tokens_samples": 1,
+        "total_input_tokens": 1036,
+        "output_tokens_samples": 1,
+        "total_output_tokens": 138,
+        "cache_read_tokens_samples": 1,
+        "total_cache_read_tokens": 256,
+        "model_calls_samples": 1,
+        "total_model_calls": 2
+      }
+    },
+    {
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "scenario": "recursive_objects",
+      "runs": 2,
+      "errors": 0,
+      "metrics": {
+        "first_json_valid": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_schema_valid": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_arguments_correct": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_generation_success": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_envelope_valid": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_name_correct": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_attempt_success": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "eventual_success": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "repair_used": {
+          "passed": 0,
+          "failed": 2,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "repair_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 2,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "retry_used": {
+          "passed": 0,
+          "failed": 2,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "retry_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 2,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "search_recall_at_k": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "checkpoints": {
+        "search_generation": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "search_response": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "generation": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "execution": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "search_quality": {
+        "samples": 2,
+        "mean_recall_at_k": 1.0,
+        "mean_precision_at_k": 0.35,
+        "mean_reciprocal_rank": 1.0
+      },
+      "telemetry": {
+        "latency_samples": 2,
+        "mean_duration_ms": 1489.985,
+        "observed_search_calls": 2,
+        "observed_tool_calls": 2,
+        "input_tokens_samples": 2,
+        "total_input_tokens": 2237,
+        "output_tokens_samples": 2,
+        "total_output_tokens": 316,
+        "cache_read_tokens_samples": 2,
+        "total_cache_read_tokens": 512,
+        "model_calls_samples": 2,
+        "total_model_calls": 4
+      }
+    },
+    {
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "scenario": "escaping_nested",
+      "runs": 1,
+      "errors": 0,
+      "metrics": {
+        "first_json_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_schema_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_arguments_correct": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "first_generation_success": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "first_envelope_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_name_correct": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_attempt_success": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "eventual_success": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "repair_used": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "repair_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 1,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "retry_used": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "retry_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 1,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "search_recall_at_k": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "checkpoints": {
+        "search_generation": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "search_response": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "generation": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "execution": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        }
+      },
+      "search_quality": {
+        "samples": 1,
+        "mean_recall_at_k": 1.0,
+        "mean_precision_at_k": 0.25,
+        "mean_reciprocal_rank": 1.0
+      },
+      "telemetry": {
+        "latency_samples": 1,
+        "mean_duration_ms": 1483.01,
+        "observed_search_calls": 1,
+        "observed_tool_calls": 1,
+        "input_tokens_samples": 1,
+        "total_input_tokens": 1039,
+        "output_tokens_samples": 1,
+        "total_output_tokens": 147,
+        "cache_read_tokens_samples": 1,
+        "total_cache_read_tokens": 256,
+        "model_calls_samples": 1,
+        "total_model_calls": 2
+      }
+    },
+    {
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "scenario": "nested_arrays",
+      "runs": 1,
+      "errors": 0,
+      "metrics": {
+        "first_json_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_schema_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_arguments_correct": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_generation_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_envelope_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_name_correct": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_attempt_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "eventual_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "repair_used": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "repair_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 1,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "retry_used": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "retry_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 1,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "search_recall_at_k": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "checkpoints": {
+        "search_generation": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "search_response": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "generation": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "execution": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "search_quality": {
+        "samples": 1,
+        "mean_recall_at_k": 1.0,
+        "mean_precision_at_k": 0.2,
+        "mean_reciprocal_rank": 1.0
+      },
+      "telemetry": {
+        "latency_samples": 1,
+        "mean_duration_ms": 1566.87,
+        "observed_search_calls": 1,
+        "observed_tool_calls": 1,
+        "input_tokens_samples": 1,
+        "total_input_tokens": 1209,
+        "output_tokens_samples": 1,
+        "total_output_tokens": 164,
+        "cache_read_tokens_samples": 1,
+        "total_cache_read_tokens": 256,
+        "model_calls_samples": 1,
+        "total_model_calls": 2
+      }
+    },
+    {
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "scenario": "nested_arrays_null",
+      "runs": 2,
+      "errors": 0,
+      "metrics": {
+        "first_json_valid": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_schema_valid": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_arguments_correct": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_generation_success": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_envelope_valid": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_name_correct": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_attempt_success": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "eventual_success": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "repair_used": {
+          "passed": 0,
+          "failed": 2,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "repair_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 2,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "retry_used": {
+          "passed": 0,
+          "failed": 2,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "retry_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 2,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "search_recall_at_k": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "checkpoints": {
+        "search_generation": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "search_response": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "generation": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "execution": {
+          "passed": 2,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 2,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "search_quality": {
+        "samples": 2,
+        "mean_recall_at_k": 1.0,
+        "mean_precision_at_k": 0.225,
+        "mean_reciprocal_rank": 1.0
+      },
+      "telemetry": {
+        "latency_samples": 2,
+        "mean_duration_ms": 1489.7350000000001,
+        "observed_search_calls": 2,
+        "observed_tool_calls": 2,
+        "input_tokens_samples": 2,
+        "total_input_tokens": 2524,
+        "output_tokens_samples": 2,
+        "total_output_tokens": 391,
+        "cache_read_tokens_samples": 2,
+        "total_cache_read_tokens": 512,
+        "model_calls_samples": 2,
+        "total_model_calls": 4
+      }
+    },
+    {
+      "configuration": {
+        "provider": "deepseek",
+        "model": "deepseek-flash",
+        "variant": "discovery",
+        "evaluation_scope": "trajectory",
+        "schema_placement": "history",
+        "agentscope_version": "2.0.8",
+        "model_version": "DeepSeek-V4.1-Flash",
+        "strict_output": false,
+        "tool_choice": "auto",
+        "temperature": 0.0,
+        "seed": null,
+        "catalog_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "prompt_version": "agentscope-tool-loading-full-trajectory:1.0.0",
+        "source": "recorded"
+      },
+      "scenario": "objects_types",
+      "runs": 1,
+      "errors": 0,
+      "metrics": {
+        "first_json_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_schema_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_arguments_correct": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_generation_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_envelope_valid": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_tool_name_correct": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "first_attempt_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "eventual_success": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "repair_used": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "repair_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 1,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "retry_used": {
+          "passed": 0,
+          "failed": 1,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 0.0,
+          "reached_rate": 0.0
+        },
+        "retry_recovery": {
+          "passed": 0,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 1,
+          "eligible": 0,
+          "rate": null,
+          "reached_rate": null
+        },
+        "search_recall_at_k": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "checkpoints": {
+        "search_generation": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "search_response": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "generation": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        },
+        "execution": {
+          "passed": 1,
+          "failed": 0,
+          "not_reached": 0,
+          "not_applicable": 0,
+          "eligible": 1,
+          "rate": 1.0,
+          "reached_rate": 1.0
+        }
+      },
+      "search_quality": {
+        "samples": 1,
+        "mean_recall_at_k": 1.0,
+        "mean_precision_at_k": 0.5,
+        "mean_reciprocal_rank": 1.0
+      },
+      "telemetry": {
+        "latency_samples": 1,
+        "mean_duration_ms": 1513.97,
+        "observed_search_calls": 1,
+        "observed_tool_calls": 1,
+        "input_tokens_samples": 1,
+        "total_input_tokens": 966,
+        "output_tokens_samples": 1,
+        "total_output_tokens": 151,
+        "cache_read_tokens_samples": 1,
+        "total_cache_read_tokens": 256,
+        "model_calls_samples": 1,
+        "total_model_calls": 2
+      }
+    }
+  ]
+}
