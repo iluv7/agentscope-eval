@@ -61,6 +61,59 @@ model; the command-line adapter currently configures DeepSeek. Use
 `--tool-choice auto` for the primary benchmark, since forcing a tool would hide
 whether the model chose the required entry point.
 
+### Full AgentScope capture and evaluation flow
+
+The bundled runner currently calls the AgentScope model layer directly. Once
+AgentScope provides the complete `search_tools` to `execute_tool` path, the
+same dataset and scorer can evaluate the full agent loop through event and
+middleware capture:
+
+```mermaid
+flowchart TD
+    A["Load Case<br/>input + reference labels"]
+    B["Send only input to<br/>AgentScope Agent"]
+    C["First reasoning phase<br/>model calls search_tools"]
+    D["AgentScope executes search_tools<br/>and returns tools + schemas"]
+    E["Second reasoning phase<br/>model calls execute_tool"]
+    F["Dispatcher validates arguments<br/>and invokes the real tool"]
+    G["Real tool returns status + output"]
+    H["Recorder correlates evidence<br/>by call_id into one Attempt"]
+    I["Case labels + Attempt<br/>become one Trial"]
+    J["Evaluator scores four checkpoints"]
+    K["Aggregate Trials<br/>into JSON + Markdown reports"]
+
+    A --> B --> C --> D --> E --> F --> G --> H --> I --> J --> K
+
+    C -. "ToolCall events<br/>raw search arguments" .-> H
+    D -. "ToolResult events<br/>actual search response" .-> H
+    E -. "ToolCall events<br/>raw execute arguments" .-> H
+    F -. "Tool middleware<br/>actual tool + arguments" .-> H
+    G -. "Tool middleware<br/>status + output" .-> H
+```
+
+Each case keeps the user input separate from its reference labels. Only
+`input` is sent to the agent; `target_tool`, `relevant_tools`,
+`expected_arguments`, and `expected_output` remain private to the evaluator.
+
+The event stream preserves the model's raw `search_tools` and `execute_tool`
+calls. Tool-result events capture the search response, while middleware at the
+dispatcher or real-tool boundary captures the actual tool name, arguments,
+status, and output. The recorder joins this evidence by call ID:
+
+```text
+Attempt
+├── search_call
+├── search_result
+├── call
+└── execution
+```
+
+The attempt, run outcome, telemetry, and case labels form one `Trial`. The
+evaluator then checks search-call generation, search-result quality,
+`execute_tool` generation, and real execution. Missing downstream evidence is
+retained as `failed` or `not_reached`; it is never synthesized. Scoring is
+fully deterministic and does not use an LLM judge.
+
 ## Run the included fixture
 
 Run these commands from the repository root. All suite-specific code, tests, examples, and documentation live in this directory. The shared service discovers this suite through `api.py`; `__main__.py` provides its standalone command.
